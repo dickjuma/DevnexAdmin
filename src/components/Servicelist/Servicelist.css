@@ -1,8 +1,6 @@
 .table-wrapper {
   padding: 20px;
   font-family: "Poppins", sans-serif;
-  background: #f7f8fa;
-  min-height: 100vh;
 }
 
 .table-header {
@@ -16,11 +14,6 @@
   font-size: 24px;
   font-weight: 600;
   color: #333;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 10px;
 }
 
 .toggle-btn {
@@ -37,23 +30,8 @@
   background: #28a745;
 }
 
-.switch-btn {
-  background: #007bff;
-}
-
-.refresh-btn {
-  background: #6c757d;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  border: none;
-}
-
-.refresh-btn:hover {
-  background: #5a6268;
+.toggle-btn:hover {
+  opacity: 0.9;
 }
 
 .table-container {
@@ -125,7 +103,6 @@
 
 .loading-text {
   color: #007bff;
-  font-weight: 500;
 }
 
 .error-text {
@@ -133,7 +110,7 @@
   margin-top: 10px;
 }
 
-
+/* Dialog Box */
 .dialog-box {
   position: fixed;
   top: 50%;
@@ -185,46 +162,4 @@
 
 .dialog-cancel:hover {
   background: #f44336;
-}
-
-
-.edit-price {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.price-input {
-  width: 80px;
-  padding: 4px 6px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.price-input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.save-btn {
-  background: #007bff;
-  border: none;
-  color: white;
-  border-radius: 4px;
-  padding: 3px 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.save-btn:hover {
-  background: #0056b3;
-}
-
-.editable-price {
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.editable-price:hover {
-  color: #007bff;
 }

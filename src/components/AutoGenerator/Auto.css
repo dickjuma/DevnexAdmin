@@ -1,0 +1,125 @@
+/* Container */
+.auto-invoice-container {
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f8fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.auto-invoice-container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* Refresh button */
+.btn-refresh {
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.btn-refresh:hover {
+  background-color: #e0a800;
+}
+
+/* Table styles */
+.invoice-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.invoice-table th {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.invoice-table td {
+  padding: 12px;
+  background-color: #fdfdfd;
+  color: #555;
+}
+
+.invoice-table tbody tr:hover td {
+  background-color: #e9f5ff;
+}
+
+/* Payment status button */
+.status-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.status-btn.paid { background-color: #28a745; }
+.status-btn.pending { background-color: #dc3545; }
+
+.status-btn:hover {
+  opacity: 0.85;
+}
+
+/* Generate button */
+.btn-generate {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+.btn-generate:hover {
+  background-color: #0056b3;
+}
+
+/* No orders row */
+.invoice-table td[colspan] {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+}
+
+/* Toastify tweaks */
+.Toastify__toast--success {
+  background: #28a745;
+}
+.Toastify__toast--error {
+  background: #dc3545;
+}
+.Toastify__toast--warning {
+  background: #ffc107;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .invoice-table th, .invoice-table td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .btn-refresh, .btn-generate, .status-btn {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+  }
+}

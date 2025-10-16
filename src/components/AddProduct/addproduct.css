@@ -1,50 +1,96 @@
-.add-product{
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 800px;
-    padding: 30px 50px;
-    margin:20px 30px ;
-    border-radius: 6px;
-    background: white;
+.add-product {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.addproduct-itemfield{
-    width: 100%;
-    color: #7b7b7b;
-    font-size: 18px;
 
+.addproduct-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #333;
 }
-.addproduct-itemfield input{
-  box-sizing: border-box;
+
+.addproduct-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  height: 50px;
-  border-radius: 4px;
-  padding-left: 15px;
-  border: 1px solid black;
-  outline: none;
-  color: #7b7b7b;
-  font-size: 14px;
+  max-width: 900px;
 }
-.addproduct-price{
-   display: flex;
-   gap: 40px;
-}
-.addproduct-image{
-    height: 120px;
-    width: 120px;
-    border-radius: 10px;
-    object-fit: contain;
-    margin-top: 10px;
 
+.addproduct-image-section {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
 }
-.addproduct-btn{
-    width: 150px;
-    height: 50px;
-    border-radius: 6px;
-    margin-top: 20px;
-    cursor: pointer;
-    border: none;
-    background: #6079ff;
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
+
+.addproduct-image {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px dashed #ccc;
+  cursor: pointer;
+}
+
+.addproduct-imgtext {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.addproduct-form {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.addproduct-itemfield p {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.addproduct-itemfield input,
+.addproduct-itemfield textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.addproduct-itemfield input:focus,
+.addproduct-itemfield textarea:focus {
+  border-color: #007bff;
+}
+
+.addproduct-btn {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.addproduct-btn:hover {
+  background: #0056b3;
+}
+
+.addproduct-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
 }

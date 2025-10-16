@@ -1,0 +1,226 @@
+.users-container {
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.users-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.toggle-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-btn.demo-active {
+  background: #28a745;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
+}
+
+.users-table-container {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.users-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+  color: #555;
+}
+
+.masked-password {
+  color: #888;
+  font-style: italic;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between delete and blacklist buttons */
+}
+
+.delete-icon {
+  width: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.delete-icon:hover {
+  transform: scale(1.1);
+}
+
+.blacklist-btn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.blacklist-btn:hover {
+  background: #f44336;
+  transform: scale(1.05);
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
+}
+
+.loading-text {
+  color: #007bff;
+  font-size: 16px;
+}
+
+.error-message {
+  background: #ffeaea;
+  padding: 15px;
+  border-radius: 6px;
+  color: #b30000;
+  text-align: center;
+}
+
+.reload-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+/* Dialog Box */
+.dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  min-width: 300px;
+  text-align: center;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dialog-box.success {
+  border-left: 6px solid #28a745;
+}
+
+.dialog-box.error {
+  border-left: 6px solid #c62828;
+}
+
+.dialog-box.confirm {
+  border-left: 6px solid #f57c00;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.dialog-confirm {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dialog-confirm:hover {
+  background: #43a047;
+}
+
+.dialog-cancel {
+  background: #c62828;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dialog-cancel:hover {
+  background: #f44336;
+}
+
+.dialog-close {
+  margin-top: 15px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #0a4da2;
+  color: #fff;
+  font-weight: 600;
+}
+.download-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  margin-left: 8px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.download-btn:hover {
+  background: #218838;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -52%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

@@ -1,0 +1,112 @@
+.add-service {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.addservice-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #004aad;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.addservice-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1100px;
+}
+
+.addservice-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.addservice-image {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px dashed #ccc;
+  transition: all 0.3s ease-in-out;
+}
+
+.addservice-image:hover {
+  border-color: #004aad;
+  transform: scale(1.02);
+}
+
+.addservice-imgtext {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.addservice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.addservice-itemfield p {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.addservice-itemfield input,
+.addservice-itemfield textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.addservice-itemfield input:focus,
+.addservice-itemfield textarea:focus {
+  border-color: #004aad;
+  outline: none;
+}
+
+.addservice-btn {
+  padding: 12px 16px;
+  background-color: #004aad;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.addservice-btn:hover {
+  background-color: #003b88;
+}
+
+@media (max-width: 768px) {
+  .addservice-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .addservice-image {
+    width: 180px;
+    height: 180px;
+  }
+}

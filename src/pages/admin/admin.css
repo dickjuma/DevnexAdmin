@@ -1,4 +1,133 @@
-.admin{
-    display: flex;
-    
+/* --- GENERAL LAYOUT --- */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* --- SIDEBAR --- */
+.admin-sidebar {
+  width: 250px;
+  background: #0a4da2;
+  color: #fff;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+}
+
+/* Collapse Button */
+.collapse-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 10px;
+  background: #00418b;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.collapse-btn:hover {
+  background: #0058c2;
+}
+
+/* --- MAIN CONTENT --- */
+.admin-main {
+  flex: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.admin-container.collapsed .admin-main {
+  margin-left: 70px;
+}
+
+/* --- COLLAPSED SIDEBAR --- */
+.admin-container.collapsed .admin-sidebar {
+  width: 70px;
+}
+
+/* --- HEADER --- */
+.admin-header {
+  background: linear-gradient(135deg, #0a4da2, #007bff);
+  color: white;
+  padding: 25px 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.admin-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* --- CONTENT --- */
+.admin-content {
+  padding: 30px 40px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.admin-welcome {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.admin-welcome h2 {
+  font-size: 1.6rem;
+  color: #0a4da2;
+  margin-bottom: 10px;
+}
+
+/* --- SCROLLBAR --- */
+.admin-content::-webkit-scrollbar {
+  width: 8px;
+}
+.admin-content::-webkit-scrollbar-thumb {
+  background: #0a4da2;
+  border-radius: 10px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: absolute;
+    z-index: 100;
+    height: 100vh;
+    transform: translateX(-100%);
+  }
+
+  .admin-container.collapsed .admin-sidebar {
+    transform: translateX(0);
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .collapse-btn {
+    bottom: 20px;
+    right: 20px;
+  }
 }
