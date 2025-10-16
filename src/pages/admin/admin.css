@@ -5,6 +5,7 @@
   background-color: #f5f7fa;
   color: #333;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 /* --- SIDEBAR --- */
@@ -18,10 +19,11 @@
   bottom: 0;
   left: 0;
   overflow-y: auto;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease;
+  z-index: 100;
 }
 
-/* Collapse Button */
+/* --- COLLAPSE BUTTON --- */
 .collapse-btn {
   position: absolute;
   bottom: 15px;
@@ -110,15 +112,31 @@
 }
 
 /* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  /* Slightly collapse sidebar on tablets */
+  .admin-container:not(.mobile) .admin-sidebar {
+    width: 200px;
+  }
+  .admin-container:not(.mobile) .admin-main {
+    margin-left: 200px;
+  }
+}
+
 @media (max-width: 768px) {
+  /* Mobile view: sidebar hidden by default */
   .admin-sidebar {
-    position: absolute;
-    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100vh;
     transform: translateX(-100%);
+    width: 250px;
+    z-index: 200;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
   }
 
-  .admin-container.collapsed .admin-sidebar {
+  /* Sidebar shown when active */
+  .admin-container.active .admin-sidebar {
     transform: translateX(0);
   }
 
@@ -127,7 +145,22 @@
   }
 
   .collapse-btn {
+    position: fixed;
     bottom: 20px;
     right: 20px;
+    z-index: 250;
+  }
+}
+
+/* Optional: adjust content padding on small screens */
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 20px;
+  }
+  .admin-content {
+    padding: 20px;
+  }
+  .admin-welcome {
+    padding: 20px;
   }
 }
