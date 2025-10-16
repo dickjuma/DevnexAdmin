@@ -3,18 +3,18 @@
   position: fixed;
   top: 70px;
   left: 0;
-  bottom: 0; /* stretch to bottom */
+  bottom: 0;
   width: 230px;
   background-color: #004aad;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: width 0.3s ease, background-color 0.3s ease;
+  transition: width 0.3s ease, background-color 0.3s ease, left 0.3s ease;
   box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 90;
   font-family: "Poppins", sans-serif;
-  overflow: hidden; /* prevent outer scrollbar */
+  overflow: hidden;
 }
 
 /* ================= Collapsed Sidebar ================= */
@@ -124,14 +124,43 @@
 }
 
 /* ================= Responsive ================= */
+
+/* Auto-collapse sidebar on small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -230px; /* hide sidebar by default */
+  }
+
+  .sidebar.active {
+    left: 0; /* slide in sidebar when toggled */
+  }
+
+  .sidebar.collapsed {
+    width: 230px; /* keep full width for toggle effect */
+  }
+
+  .main-content {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+  }
+
+  .sidebar.active ~ .main-content {
+    margin-left: 230px;
+  }
+
+  .collapse-btn {
+    display: none; /* optional: hide collapse btn on mobile */
+  }
+}
+
+/* Small height adjustments */
 @media (max-height: 600px) {
   .sidebar-menu {
     overflow-y: auto;
   }
 }
 
-/* ==================== GLOBAL DARK/LIGHT MODE ==================== */
-
+/* ==================== DARK/LIGHT MODE ==================== */
 /* 🌙 Dark Mode */
 body.dark-mode {
   background-color: #121212;
