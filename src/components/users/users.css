@@ -8,6 +8,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+  flex-wrap: wrap; /* allow wrapping on smaller screens */
 }
 
 .users-title {
@@ -40,12 +41,13 @@
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
+  overflow-x: auto; /* horizontal scroll on small screens */
 }
 
 .users-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 500px; /* ensures baseline width */
 }
 
 .users-table th,
@@ -53,6 +55,7 @@
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
 .users-table th {
@@ -69,7 +72,8 @@
 .action-buttons {
   display: flex;
   align-items: center;
-  gap: 10px; /* space between delete and blacklist buttons */
+  gap: 10px; 
+  flex-wrap: wrap; /* prevent overflow */
 }
 
 .delete-icon {
@@ -139,6 +143,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   min-width: 300px;
+  max-width: 90%; /* responsive width */
   text-align: center;
   animation: fadeIn 0.2s ease-in-out;
 }
@@ -160,6 +165,14 @@
   justify-content: center;
   gap: 15px;
   margin-top: 15px;
+  flex-wrap: wrap; /* wrap buttons on small screens */
+}
+
+.dialog-confirm,
+.dialog-cancel,
+.dialog-close {
+  flex: 1 1 auto;
+  min-width: 100px;
 }
 
 .dialog-confirm {
@@ -200,6 +213,7 @@
   color: #fff;
   font-weight: 600;
 }
+
 .download-btn {
   background: #28a745;
   color: #fff;
@@ -209,10 +223,10 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .download-btn:hover {
   background: #218838;
 }
-
 
 @keyframes fadeIn {
   from {
@@ -222,5 +236,65 @@
   to {
     opacity: 1;
     transform: translate(-50%, -50%);
+  }
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+  .users-table {
+    min-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .users-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .action-buttons {
+    gap: 5px;
+  }
+
+  .users-table th,
+  .users-table td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .toggle-btn,
+  .blacklist-btn,
+  .download-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .dialog-box {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .users-table-container {
+    overflow-x: auto;
+  }
+
+  .users-table th,
+  .users-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .toggle-btn,
+  .blacklist-btn,
+  .download-btn {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .dialog-box {
+    padding: 15px;
+    min-width: 90%;
   }
 }

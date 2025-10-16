@@ -34,12 +34,14 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 500px; /* ensures table has a baseline width */
 }
 
 th, td {
   padding: 10px;
   border-bottom: 1px solid #eee;
   text-align: left;
+  font-size: 14px;
 }
 
 th {
@@ -77,6 +79,7 @@ th {
   border-radius: 8px;
   margin-bottom: 10px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -86,6 +89,7 @@ textarea {
 
 .form-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -164,6 +168,7 @@ button.refresh {
   margin-top: 20px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .close-btn {
@@ -171,17 +176,69 @@ button.refresh {
 }
 
 /* === Responsive === */
+@media (max-width: 1024px) {
+  .receipt-main-container {
+    gap: 15px;
+  }
+
+  table {
+    min-width: 400px;
+  }
+}
+
 @media (max-width: 768px) {
   .receipt-main-container {
     flex-direction: column;
   }
 
+  .table-section, .form-section {
+    padding: 15px;
+  }
+
+  table th, table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
   .receipt-header {
     flex-direction: column;
+    align-items: center;
     text-align: center;
+    gap: 5px;
   }
 
   .receipt-meta {
     text-align: center;
+    margin-top: 5px;
+  }
+
+  .preview-actions {
+    justify-content: center;
+  }
+
+  button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-section, .form-section {
+    padding: 10px;
+  }
+
+  table th, table td {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .receipt-preview {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 }

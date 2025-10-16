@@ -10,19 +10,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: width 0.3s ease, background-color 0.3s ease, left 0.3s ease;
+  transition: width 0.3s ease;
   box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 90;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
 
-/* ================= Collapsed Sidebar ================= */
 .sidebar.collapsed {
   width: 80px;
 }
 
-/* ================= Top Section ================= */
+/* Sidebar Top */
 .sidebar-top {
   display: flex;
   align-items: center;
@@ -34,7 +33,6 @@
 .sidebar-title {
   font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: 1px;
   color: tomato;
 }
 
@@ -50,24 +48,13 @@
   transform: scale(1.1);
 }
 
-/* ================= Menu Items ================= */
+/* Menu Items */
 .sidebar-menu {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 15px 0;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
-}
-
-.sidebar-menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
 }
 
 .sidebar-item {
@@ -107,7 +94,7 @@
   display: none;
 }
 
-/* ================= Settings Section ================= */
+/* Settings Section */
 .sidebar-settings {
   padding: 10px 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -123,118 +110,4 @@
   border-radius: 6px;
 }
 
-/* ================= Responsive ================= */
-
-/* Auto-collapse sidebar on small screens */
-@media (max-width: 768px) {
-  .sidebar {
-    left: -230px; /* hide sidebar by default */
-  }
-
-  .sidebar.active {
-    left: 0; /* slide in sidebar when toggled */
-  }
-
-  .sidebar.collapsed {
-    width: 230px; /* keep full width for toggle effect */
-  }
-
-  .main-content {
-    margin-left: 0;
-    transition: margin-left 0.3s ease;
-  }
-
-  .sidebar.active ~ .main-content {
-    margin-left: 230px;
-  }
-
-  .collapse-btn {
-    display: none; /* optional: hide collapse btn on mobile */
-  }
-}
-
-/* Small height adjustments */
-@media (max-height: 600px) {
-  .sidebar-menu {
-    overflow-y: auto;
-  }
-}
-
-/* ==================== DARK/LIGHT MODE ==================== */
-/* 🌙 Dark Mode */
-body.dark-mode {
-  background-color: #121212;
-  color: #f5f5f5;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.dark-mode .sidebar {
-  background-color: #1e1e2f;
-  color: #fff;
-}
-
-body.dark-mode .sidebar-item.active {
-  background-color: #f5f5f5;
-  color: #1e1e2f;
-}
-
-body.dark-mode .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode a {
-  color: #f5f5f5;
-}
-
-/* ☀️ Light Mode */
-body.light-mode {
-  background-color: #f9f9f9;
-  color: #222;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.light-mode .sidebar {
-  background-color: #004aad;
-  color: #fff;
-}
-
-body.light-mode .sidebar-item.active {
-  background-color: #fff;
-  color: #004aad;
-}
-
-body.light-mode .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-body.light-mode a {
-  color: #222;
-}
-
-/* ==================== MAIN CONTENT ADJUSTMENTS ==================== */
-.main-content {
-  margin-left: 230px;
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-.sidebar.collapsed ~ .main-content {
-  margin-left: 80px;
-}
-
-/* Optional cards background for theme */
-body.dark-mode .card,
-body.dark-mode .dashboard,
-body.dark-mode .content-area {
-  background-color: #1f1f2f;
-  color: #f5f5f5;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.light-mode .card,
-body.light-mode .dashboard,
-body.light-mode .content-area {
-  background-color: #ffffff;
-  color: #222;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+/* Remove all mobile transform behavior — sidebar always visible */

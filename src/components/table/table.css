@@ -1,3 +1,4 @@
+/* --- General Table Layout --- */
 .table-wrapper {
   padding: 20px;
   font-family: "Poppins", sans-serif;
@@ -5,10 +6,12 @@
   min-height: 100vh;
 }
 
+/* --- Table Header --- */
 .table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 15px;
 }
 
@@ -20,10 +23,16 @@
 
 .header-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  margin-top: 10px;
 }
 
-.toggle-btn {
+/* --- Buttons --- */
+.toggle-btn,
+.switch-btn,
+.refresh-btn,
+.download-btn {
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
@@ -43,32 +52,36 @@
 
 .refresh-btn {
   background: #6c757d;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  border: none;
 }
 
-.refresh-btn:hover {
-  background: #5a6268;
+.download-btn {
+  background: #17a2b8;
 }
 
+.toggle-btn:hover,
+.switch-btn:hover,
+.refresh-btn:hover,
+.download-btn:hover {
+  opacity: 0.85;
+}
+
+/* --- Table Container --- */
 .table-container {
   background: white;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  overflow-x: auto;
+  overflow-x: auto; /* horizontal scroll for small screens */
 }
 
+/* --- Table --- */
 .custom-table {
   width: 100%;
+  min-width: 700px; /* ensures table doesn't shrink too much */
   border-collapse: collapse;
 }
 
+/* --- Table Cells --- */
 .custom-table th,
 .custom-table td {
   padding: 10px;
@@ -82,6 +95,7 @@
   color: #555;
 }
 
+/* --- Product Images & Icons --- */
 .product-img {
   width: 60px;
   height: 60px;
@@ -99,6 +113,7 @@
   transform: scale(1.1);
 }
 
+/* --- Stock Status --- */
 .stock-status {
   padding: 4px 10px;
   border-radius: 6px;
@@ -117,6 +132,7 @@
   color: #c62828;
 }
 
+/* --- No Data / Loading / Error --- */
 .no-data {
   text-align: center;
   color: #999;
@@ -133,7 +149,7 @@
   margin-top: 10px;
 }
 
-
+/* --- Dialog Box --- */
 .dialog-box {
   position: fixed;
   top: 50%;
@@ -187,7 +203,7 @@
   background: #f44336;
 }
 
-
+/* --- Editable Price --- */
 .edit-price {
   display: flex;
   align-items: center;
@@ -227,4 +243,94 @@
 
 .editable-price:hover {
   color: #007bff;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+  .table-wrapper {
+    padding: 10px;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-buttons {
+    gap: 8px;
+  }
+
+  .toggle-btn,
+  .switch-btn,
+  .refresh-btn,
+  .download-btn {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .custom-table th,
+  .custom-table td {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  .product-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .delete-icon {
+    width: 18px;
+  }
+
+  .stock-status {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-wrapper {
+    padding: 5px;
+  }
+
+  .table-title {
+    font-size: 1.2rem;
+  }
+
+  .toggle-btn,
+  .switch-btn,
+  .refresh-btn,
+  .download-btn {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+  }
+
+  .custom-table th,
+  .custom-table td {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+
+  .product-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .delete-icon {
+    width: 16px;
+  }
+}
+
+/* --- Hint gradient for horizontal scroll --- */
+.table-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(247,248,250,1), rgba(247,248,250,0));
 }

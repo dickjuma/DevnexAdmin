@@ -20,7 +20,12 @@
   left: 0;
   overflow-y: auto;
   transition: width 0.3s ease, transform 0.3s ease;
-  z-index: 100;
+  z-index: 300; /* higher than header */
+}
+
+/* --- COLLAPSED SIDEBAR --- */
+.admin-container.collapsed .admin-sidebar {
+  width: 80px;
 }
 
 /* --- COLLAPSE BUTTON --- */
@@ -37,6 +42,7 @@
   height: 30px;
   cursor: pointer;
   transition: background 0.2s;
+  z-index: 310; /* above sidebar */
 }
 
 .collapse-btn:hover {
@@ -52,21 +58,20 @@
   transition: margin-left 0.3s ease;
 }
 
+/* Collapsed main content */
 .admin-container.collapsed .admin-main {
-  margin-left: 70px;
-}
-
-/* --- COLLAPSED SIDEBAR --- */
-.admin-container.collapsed .admin-sidebar {
-  width: 70px;
+  margin-left: 80px;
 }
 
 /* --- HEADER --- */
 .admin-header {
   background: linear-gradient(135deg, #0a4da2, #007bff);
   color: white;
-  padding: 25px 40px;
+  margin-bottom: 20px;
+  padding: 25px 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* stay below sidebar */
+  z-index: 200;
 }
 
 .admin-title {
@@ -112,8 +117,9 @@
 }
 
 /* --- RESPONSIVE --- */
+
+/* Tablet: slightly collapsed */
 @media (max-width: 1024px) {
-  /* Slightly collapse sidebar on tablets */
   .admin-container:not(.mobile) .admin-sidebar {
     width: 200px;
   }
@@ -122,22 +128,32 @@
   }
 }
 
+/* Mobile: hidden sidebar by default */
 @media (max-width: 768px) {
-  /* Mobile view: sidebar hidden by default */
   .admin-sidebar {
+    transform: translateX(-100%);
+    width: 250px;
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
-    transform: translateX(-100%);
-    width: 250px;
-    z-index: 200;
     box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    z-index: 300; /* above header */
   }
 
-  /* Sidebar shown when active */
   .admin-container.active .admin-sidebar {
     transform: translateX(0);
+  }
+
+  /* Overlay when sidebar is open */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 250; /* below sidebar */
   }
 
   .admin-main {
@@ -148,11 +164,11 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 250;
+    z-index: 310; /* above everything */
   }
 }
 
-/* Optional: adjust content padding on small screens */
+/* Mobile extra small screens */
 @media (max-width: 480px) {
   .admin-header {
     padding: 20px;
@@ -163,4 +179,10 @@
   .admin-welcome {
     padding: 20px;
   }
+}
+
+/* Optional: smooth transition for main content when sidebar opens on mobile */
+.admin-container.active .admin-main {
+  transition: margin-left 0.3s ease;
+  margin-left: 250px; /* same as sidebar width */
 }

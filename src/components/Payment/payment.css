@@ -104,9 +104,13 @@
   font-size: 0.95rem;
 }
 
-/* --- Table --- */
-.payment-table-wrapper { overflow-x: auto; }
+/* --- Table Wrapper for Horizontal Scroll --- */
+.payment-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
+/* --- Table --- */
 .payment-table {
   width: 100%;
   border-collapse: collapse;
@@ -114,6 +118,8 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  min-width: 700px;
+  table-layout: auto;
 }
 
 .payment-table th,
@@ -122,6 +128,7 @@
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 .payment-table th {
@@ -171,7 +178,7 @@
   text-align: center;
 }
 
-/* --- Dialog Overlay --- */
+/* --- Dialog Overlay & Box --- */
 .dialog-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -180,7 +187,6 @@
   z-index: 999;
 }
 
-/* --- Dialog Box --- */
 .dialog-box {
   position: fixed;
   top: 50%;
@@ -189,7 +195,7 @@
   background: #fff;
   padding: 20px 25px;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
   z-index: 1000;
   min-width: 280px;
   max-width: 90%;
@@ -199,19 +205,12 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Dialog Types (border) */
 .dialog-box.success { border-left: 5px solid #2e7d32; }
 .dialog-box.error   { border-left: 5px solid #c62828; }
 .dialog-box.confirm { border-left: 5px solid #f57c00; }
 
-/* Dialog Text */
-.dialog-box p {
-  margin: 0 0 15px 0;
-  font-size: 0.95rem;
-  color: #333;
-}
+.dialog-box p { margin: 0 0 15px 0; font-size: 0.95rem; color: #333; }
 
-/* Dialog Buttons */
 .dialog-actions {
   display: flex;
   justify-content: center;
@@ -290,4 +289,38 @@
 @keyframes dialogFadeIn {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+  .payment-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .btn-group button, .export-btn, .cash-btn, .toggle-mode-btn, .refresh-btn { margin-left: 0; padding: 6px 10px; font-size: 0.85rem; }
+  .search-bar input { font-size: 0.85rem; padding: 6px 8px; }
+
+  /* Table cards on mobile */
+  .payment-table, .payment-table thead, .payment-table tbody, .payment-table th, .payment-table td, .payment-table tr {
+    display: block;
+  }
+  .payment-table thead tr { display: none; }
+  .payment-table tbody tr {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+  }
+  .payment-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    white-space: normal;
+  }
+  .payment-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    flex: 1;
+  }
+  .payment-table td:last-child { border-bottom: 0; }
 }
