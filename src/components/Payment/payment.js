@@ -5,7 +5,7 @@ import { CSVLink } from "react-csv";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./payment.css";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Payment = ({ onOrderStatusChange }) => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,11 +28,11 @@ const Payment = ({ onOrderStatusChange }) => {
       if (demoMode) {
         setPayments(demoPayments);
       } else {
-        const res = await axios.get("http://localhost:4000/payments");
+        const res = await axios.get(`${API_URL}/payments`);
         setPayments(res.data);
       }
     } catch (err) {
-      showDialog("error", "⚠️ Failed to fetch payment records.");
+      showDialog("error", " Failed to fetch payment records.");
     } finally {
       setLoading(false);
     }
@@ -51,15 +51,15 @@ const Payment = ({ onOrderStatusChange }) => {
         if (demoMode) {
           setPayments(prev => prev.map(p => p._id === id ? { ...p, status: newStatus } : p));
           onOrderStatusChange?.(orderId, newStatus === "Confirmed" ? "Approved" : "Cancelled");
-          showDialog("success", `✅ Demo: Payment marked as ${newStatus}`);
+          showDialog("success", ` Demo: Payment marked as ${newStatus}`);
         } else {
           try {
-            await axios.post("http://localhost:4000/update-payment-status", { id, newStatus });
+            await axios.post(`${API_URL}/userdetails/update-payment-status`, { id, newStatus });
             fetchPayments();
             onOrderStatusChange?.(orderId, newStatus === "Confirmed" ? "Approved" : "Cancelled");
-            showDialog("success", `✅ Payment marked as ${newStatus}`);
+            showDialog("success", ` Payment marked as ${newStatus}`);
           } catch {
-            showDialog("error", "❌ Failed to update payment status.");
+            showDialog("error", " Failed to update payment status.");
           }
         }
       }
@@ -87,12 +87,12 @@ const Payment = ({ onOrderStatusChange }) => {
 
     if (demoMode) {
       setPayments(prev => [newPayment, ...prev]);
-      showDialog("success", "✅ Demo: Cash payment recorded successfully!");
+      showDialog("success", " Demo: Cash payment recorded successfully!");
     } else {
       try {
-        await axios.post("http://localhost:4000/cash-payment", newPayment);
+        await axios.post(`${API_URL}/cash-payment`, newPayment);
         fetchPayments();
-        showDialog("success", "✅ Cash payment recorded successfully!");
+        showDialog("success", " Cash payment recorded successfully!");
       } catch {
         showDialog("error", "❌ Failed to record cash payment.");
         return;

@@ -3,7 +3,7 @@ import "./service.css";
 import uploadimg from "../../assets/upload.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Service = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ const Service = () => {
       const formData = new FormData();
       formData.append("service", image);
 
-      const uploadResp = await fetch("http://localhost:4000/uploadservice", {
+      const uploadResp = await fetch(`${API_URL}/uploadservice`, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: formData,
@@ -59,7 +59,7 @@ const Service = () => {
         image: uploadData.image_url,
       };
 
-      const response = await fetch("http://localhost:4000/addservice", {
+      const response = await fetch(`${API_URL}/addservice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

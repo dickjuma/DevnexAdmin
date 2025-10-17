@@ -5,7 +5,7 @@ import cross from "../../assets/cross.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./table.css";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Table = () => {
   const [allItems, setAllItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -37,8 +37,8 @@ const Table = () => {
     try {
       const endpoint =
         viewType === "products"
-          ? "http://localhost:4000/allproducts"
-          : "http://localhost:4000/allservices";
+          ? `${API_URL}/allproducts`
+          : `${API_URL}/allservices`;
 
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
@@ -73,8 +73,8 @@ const Table = () => {
         try {
           const endpoint =
             viewType === "products"
-              ? "http://localhost:4000/removeproduct"
-              : "http://localhost:4000/removeservice";
+              ? `${API_URL}/removeproduct`
+              : `${API_URL}/removeservice`;
 
           const res = await fetch(endpoint, {
             method: "POST",
@@ -107,7 +107,7 @@ const Table = () => {
     }
 
     try {
-      await fetch(`http://localhost:4000/togglestock`, {
+      await fetch(`${API_URL}/togglestock`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
@@ -144,8 +144,8 @@ const Table = () => {
     try {
       const endpoint =
         viewType === "products"
-          ? "http://localhost:4000/updateproductprice"
-          : "http://localhost:4000/updateserviceprice";
+          ? `${API_URL}/updateproductprice`
+          : `${API_URL}/updateserviceprice`;
 
       await fetch(endpoint, {
         method: "POST",

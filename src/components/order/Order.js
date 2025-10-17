@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { CSVLink } from "react-csv";
 import "./order.css";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,7 @@ const Order = () => {
         setLoading(false);
         return;
       }
-      const res = await fetch("http://localhost:4000/allorders");
+      const res = await fetch(`${API_URL}/allorders`);
       if (!res.ok) throw new Error("Failed to fetch orders from server");
       const data = await res.json();
       setOrders(data);
@@ -86,7 +86,7 @@ const Order = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/updateorder", {
+      const res = await fetch(`${API_URL}/updateorder`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: orderId, status: newStatus }), // send _id
@@ -118,7 +118,7 @@ const Order = () => {
       return;
     }
 
-    fetch("http://localhost:4000/sendmessage", {
+    fetch(`${API_URL}/sendmessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderId: dialog.orderId, message: dialog.message }),

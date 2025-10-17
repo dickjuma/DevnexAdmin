@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -67,7 +67,7 @@ const Dashboard = () => {
     if (showToast) toast.info("Refreshing dashboard data...");
 
     try {
-      const res = await axios.get("http://localhost:4000/stats", {
+      const res = await axios.get(`${API_URL}/stats`, {
         timeout: 8000,
       });
 

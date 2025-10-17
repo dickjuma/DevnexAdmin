@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./addproduct.css";
 import uploadimg from "../../assets/upload.png";
 import { toast } from "react-toastify";
-
+const API_URL = process.env.REACT_APP_API_URL;
 const Addproduct = () => {
   const [image, setImage] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const Addproduct = () => {
       let formData = new FormData();
       formData.append("product", image);
 
-      const uploadResp = await fetch("http://localhost:4000/upload", {
+      const uploadResp = await fetch(`${API_URL}/upload`, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: formData,
@@ -47,7 +47,7 @@ const Addproduct = () => {
       if (responseData.success) {
         product.image = responseData.image_url;
 
-        const productResp = await fetch("http://localhost:4000/addproduct", {
+        const productResp = await fetch(`${API_URL}/addproduct`, {
           method: "POST",
           headers: {
             Accept: "application/json",

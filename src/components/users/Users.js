@@ -5,6 +5,7 @@ import cross from "../../assets/cross.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./users.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -23,7 +24,7 @@ const Users = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/userdetails");
+      const res = await fetch(`${API_URL}/userdetails`);
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
       setUsers(Array.isArray(data) && data.length ? data : demoUsers);
