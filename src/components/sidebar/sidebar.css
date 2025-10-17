@@ -1,113 +1,189 @@
-/* ================= Sidebar Container ================= */
-.sidebar {
+/* ===== SIDEBAR CONTAINER ===== */
+.sidebar-container {
   position: fixed;
-  top: 70px;
+  top: 0;
   left: 0;
-  bottom: 0;
-  width: 230px;
-  background-color: #004aad;
+  height: 100vh;
+  background: #005eff; /* Blue tone */
   color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  width: 70px;
   transition: width 0.3s ease;
-  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
-  z-index: 90;
-  font-family: "Poppins", sans-serif;
+  z-index: 1000;
   overflow: hidden;
 }
 
-.sidebar.collapsed {
-  width: 80px;
+/* When expanded */
+.sidebar-container.expanded {
+  width: 210px;
 }
 
-/* Sidebar Top */
-.sidebar-top {
+/* ===== SIDEBAR CONTENT ===== */
+.sidebar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  flex-direction: column;
+  height: 100%;
+  padding-top: 20px;
 }
 
-.sidebar-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: tomato;
-}
-
-.collapse-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.collapse-btn:hover {
-  transform: scale(1.1);
-}
-
-/* Menu Items */
 .sidebar-menu {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 15px 0;
-  overflow-y: auto;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 12px 20px;
-  color: white;
+  padding: 12px 16px;
+  gap: 12px;
+  color: #f3f4f6;
   text-decoration: none;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  font-size: 15px;
+  transition: background 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
 }
 
 .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  padding-left: 25px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
 
 .sidebar-item.active {
-  background-color: white;
-  color: #004aad;
-  font-weight: 600;
+  background: #1e40af;
+  color: #fff;
 }
 
-.icon {
+.sidebar-item .icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 24px;
+  font-size: 20px;
 }
 
-.sidebar.collapsed .sidebar-item {
-  justify-content: center;
-  padding: 12px 0;
-}
-
-.sidebar.collapsed .text {
+/* Hide text when collapsed */
+.sidebar-container:not(.expanded) .text {
   display: none;
 }
 
-/* Settings Section */
+/* ===== SIDEBAR SETTINGS ===== */
 .sidebar-settings {
-  padding: 10px 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+  margin-bottom: 20px;
 }
 
-.settings-item {
+/* ===== TOGGLE BUTTON ===== */
+.sidebar-toggle {
+  padding: 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0041b9;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 20px;
+}
+
+/* ===== ADMIN LAYOUT (MAIN AREA) ===== */
+.admin-main {
+  margin-left: 70px; /* Default sidebar width */
+  transition: margin-left 0.3s ease;
+  background: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* When sidebar expands */
+.sidebar-container.expanded ~ .admin-main {
+  margin-left: 210px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.admin-content {
+  padding: 25px;
+  background: #fff;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: #005eff;
+  color: #fff;
+  padding: 12px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .brand-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE (MOBILE/TABLET) ===== */
+@media (max-width: 1024px) {
+  .sidebar-container {
+    width: 70px;
+  }
+
+  .sidebar-container.expanded {
+    width: 210px;
+  }
+
+  .admin-main {
+    margin-left: 70px;
+  }
+
+  .sidebar-container.expanded ~ .admin-main {
+    margin-left: 210px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Sidebar always visible (icons only) */
+  .sidebar-container {
+    width: 70px;
+  }
+
+  /* When expanded (show text) */
+  .sidebar-container.expanded {
+    width: 210px;
+  }
+
+  /* Adjust main area dynamically */
+  .admin-main {
+    margin-left: 70px;
+  }
+
+  .sidebar-container.expanded ~ .admin-main {
+    margin-left: 210px;
+  }
+
+  /* Fixed toggle button */
+  .sidebar-toggle {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1200;
+    background: #0041b9;
+    border-radius: 6px;
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+.sidebar-item,
+.admin-main,
+.sidebar-container {
   transition: all 0.3s ease;
 }
-
-.settings-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-}
-
-/* Remove all mobile transform behavior — sidebar always visible */

@@ -12,13 +12,22 @@ import Login from "../../components/Adminlogin/Login";
 import InvoiceGenerator from "../../components/Invoice/Invoice";
 import ReceiptGenerator from "../../components/Reciet/Reciept";
 import Auto from "../../components/AutoGenerator/Auto";
+import logo from "../../assets/account.png";
 
 import "./admin.css";
 
 const Admin = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [screenSize, setScreenSize] = useState("desktop"); // desktop | tablet | mobile
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [screenSize, setScreenSize] = useState("desktop");
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
+  // Listen to sidebar expansion from Sidebar.js via event
+  useEffect(() => {
+    const handleSidebarToggle = (e) => {
+      setIsSidebarExpanded(e.detail === "expanded");
+    };
+    window.addEventListener("sidebarToggle", handleSidebarToggle);
+    return () => window.removeEventListener("sidebarToggle", handleSidebarToggle);
+  }, []);
 
   // Detect screen size
   useEffect(() => {
@@ -34,41 +43,24 @@ const Admin = () => {
   }, []);
 
   return (
-    <div className={`admin-container ${isCollapsed ? "collapsed" : ""} ${screenSize}`}>
-      {/* Sidebar */}
-      {screenSize !== "mobile" ? (
-        <aside className={`admin-sidebar ${isCollapsed ? "collapsed" : ""}`}>
-          <Sidebar />
-          {/* Collapse button */}
-          <button
-            className="collapse-btn"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-          >
-            {isCollapsed ? "»" : "«"}
-          </button>
-        </aside>
-      ) : (
-        <>
-          {/* Mobile toggle button */}
-          <button
-            className="mobile-toggle-btn"
-            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-          >
-            ☰
-          </button>
-          {mobileSidebarOpen && (
-            <aside className="mobile-sidebar-overlay" onClick={() => setMobileSidebarOpen(false)}>
-              <div className="mobile-sidebar">
-                <Sidebar />
-              </div>
-            </aside>
-          )}
-        </>
-      )}
+    <div className={`admin-wrapper ${isSidebarExpanded ? "sidebar-expanded" : ""}`}>
+      {/* ===== SIDEBAR ===== */}
+      <Sidebar />
 
-      {/* Main content */}
+      {/* ===== MAIN CONTENT ===== */}
       <main className="admin-main">
+        {/* ===== NAVBAR ===== */}
+        <nav className="navbar">
+          <div className="nav-left">
+            <img src={logo} alt="Logo" className="nav-logo" />
+            <h2 className="brand-name">Dickson Juma</h2>
+          </div>
+          <div className="nav-center">
+            <p className="nav-greeting">Hello, Welcome Back Admin!</p>
+          </div>
+        </nav>
+
+        {/* ===== HEADER ===== */}
         <header className="admin-header">
           <div className="admin-header-content">
             <h1 className="admin-title">Admin Dashboard Panel</h1>
@@ -78,6 +70,7 @@ const Admin = () => {
           </div>
         </header>
 
+        {/* ===== PAGE CONTENT ===== */}
         <section className="admin-content">
           <Routes>
             <Route path="/addproduct" element={<Addproduct />} />
@@ -97,7 +90,8 @@ const Admin = () => {
                 <div className="admin-welcome">
                   <h2>Welcome to the Admin Control Center</h2>
                   <p>
-                    Use the sidebar to navigate between management tools and keep your platform up to date.
+                    Use the sidebar to navigate between management tools and
+                    keep your platform up to date.
                   </p>
                 </div>
               }

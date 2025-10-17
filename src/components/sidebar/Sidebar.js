@@ -15,14 +15,14 @@ import {
   Sun,
   Moon,
   FileText,
+  Menu,
 } from "lucide-react";
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);       // Desktop collapse
-  const [mobileOpen, setMobileOpen] = useState(false);     // Mobile toggle
+  const [collapsed, setCollapsed] = useState(true); // Default collapsed
   const [darkMode, setDarkMode] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [screenSize, setScreenSize] = useState("desktop"); // desktop | tablet | mobile
+  const [screenSize, setScreenSize] = useState("desktop");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,26 +53,23 @@ const Sidebar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Load dark mode & login state
+  // Load dark mode and login state
   useEffect(() => {
     setDarkMode(localStorage.getItem("darkMode") === "true");
     setIsLoggedIn(!!localStorage.getItem("token"));
   }, []);
 
-  // Update login state when localStorage changes
   useEffect(() => {
     const handleStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  // Apply dark mode to root
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
     document.documentElement.classList.toggle("dark-mode", darkMode);
   }, [darkMode]);
 
-  // Handle login/logout
   const handleAuth = () => {
     if (isLoggedIn) {
       localStorage.removeItem("token");
@@ -83,76 +80,46 @@ const Sidebar = () => {
     }
   };
 
-  // Toggle collapse (desktop/tablet)
   const toggleCollapse = () => {
-    if (screenSize === "desktop" || screenSize === "tablet") {
-      setCollapsed(!collapsed);
-    } else {
-      setMobileOpen(!mobileOpen);
-    }
+    setCollapsed(!collapsed);
   };
 
   return (
-    <>
-      {/* Mobile overlay */}
-      {mobileOpen && screenSize === "mobile" && (
-        <div className="sidebar-overlay" onClick={() => setMobileOpen(false)}></div>
-      )}
+    <div className={`sidebar-container ${collapsed ? "collapsed" : "expanded"} ${screenSize}`}>
+      {/* Menu button (top-left corner) */}
+      <div className="sidebar-toggle" onClick={toggleCollapse}>
+        <Menu size={22} />
+      </div>
 
-      <div
-        className={`sidebar 
-          ${collapsed ? "collapsed" : ""} 
-          ${mobileOpen && screenSize === "mobile" ? "active" : ""} 
-          ${screenSize === "mobile" ? "horizontal" : ""}`}
-      >
-        {/* Top section */}
-        {screenSize !== "mobile" && (
-          <div className="sidebar-top">
-            <h2 className="sidebar-title">{collapsed ? "D" : "Shop Manager"}</h2>
-            <button className="collapse-btn" onClick={toggleCollapse}>
-              {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
-            </button>
-          </div>
-        )}
-
-        {/* Menu items */}
-        <nav className={`sidebar-menu ${screenSize}`}>
+      {/* Sidebar */}
+      <div className="sidebar">
+        <nav className="sidebar-menu">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`sidebar-item ${
-                location.pathname === item.path ? "active" : ""
-              }`}
-              onClick={() => screenSize === "mobile" && setMobileOpen(false)}
+              className={`sidebar-item ${location.pathname === item.path ? "active" : ""}`}
               title={item.name}
             >
               <span className="icon">{item.icon}</span>
-              {(screenSize === "desktop" || (screenSize === "tablet" && !collapsed)) && (
-                <span className="text">{item.name}</span>
-              )}
+              {!collapsed && <span className="text">{item.name}</span>}
             </Link>
           ))}
         </nav>
 
-        {/* Settings */}
-        {screenSize !== "mobile" && (
-          <div className="sidebar-settings">
-            {/* Dark Mode */}
-            <div className="sidebar-item settings-item" onClick={() => setDarkMode(!darkMode)}>
-              <span className="icon">{darkMode ? <Sun size={20} /> : <Moon size={20} />}</span>
-              {!collapsed && <span className="text">{darkMode ? "Light Mode" : "Dark Mode"}</span>}
-            </div>
-
-            {/* Auth */}
-            <div className="sidebar-item settings-item" onClick={handleAuth}>
-              <span className="icon">{isLoggedIn ? <LogOut size={20} /> : <LogIn size={20} />}</span>
-              {!collapsed && <span className="text">{isLoggedIn ? "Sign Out" : "Sign In"}</span>}
-            </div>
+        <div className="sidebar-settings">
+          <div className="sidebar-item" onClick={() => setDarkMode(!darkMode)}>
+            <span className="icon">{darkMode ? <Sun size={20} /> : <Moon size={20} />}</span>
+            {!collapsed && <span className="text">{darkMode ? "Light Mode" : "Dark Mode"}</span>}
           </div>
-        )}
+
+          <div className="sidebar-item" onClick={handleAuth}>
+            <span className="icon">{isLoggedIn ? <LogOut size={20} /> : <LogIn size={20} />}</span>
+            {!collapsed && <span className="text">{isLoggedIn ? "Sign Out" : "Sign In"}</span>}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

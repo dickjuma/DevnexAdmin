@@ -1,31 +1,40 @@
+/* ===== USERS CONTAINER ===== */
 .users-container {
-  padding: 20px;
+  padding: 25px;
   font-family: "Poppins", sans-serif;
+  background: #fff;
+  color: #333;
+  min-height: calc(100vh - 60px);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
+/* ===== HEADER ===== */
 .users-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap; /* allow wrapping on smaller screens */
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .users-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: #1e3a8a; /* deep blue tone */
 }
 
 .toggle-btn {
-  background: #007bff;
+  background: #005eff;
   color: white;
   border: none;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .toggle-btn.demo-active {
@@ -33,47 +42,60 @@
 }
 
 .toggle-btn:hover {
-  opacity: 0.9;
+  transform: scale(1.05);
+  background: #0047c1;
 }
 
+/* ===== TABLE CONTAINER ===== */
 .users-table-container {
   background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-x: auto; /* horizontal scroll on small screens */
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
 }
 
 .users-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 500px; /* ensures baseline width */
+  min-width: 700px;
+  transition: all 0.3s ease;
 }
 
+/* ===== TABLE HEADINGS ===== */
 .users-table th,
 .users-table td {
-  padding: 10px;
+  padding: 12px;
   text-align: left;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
 
 .users-table th {
-  background: #f8f8f8;
+  background: #f0f6ff;
   font-weight: 600;
-  color: #555;
+  color: #333;
 }
 
+.users-table tr:hover {
+  background: #f9faff;
+}
+
+/* ===== PASSWORD MASK ===== */
 .masked-password {
   color: #888;
   font-style: italic;
 }
 
+/* ===== ACTION BUTTONS ===== */
 .action-buttons {
   display: flex;
   align-items: center;
-  gap: 10px; 
-  flex-wrap: wrap; /* prevent overflow */
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .delete-icon {
@@ -98,10 +120,11 @@
 }
 
 .blacklist-btn:hover {
-  background: #f44336;
+  background: #b71c1c;
   transform: scale(1.05);
 }
 
+/* ===== EMPTY / STATUS STATES ===== */
 .no-data {
   text-align: center;
   color: #999;
@@ -109,8 +132,9 @@
 }
 
 .loading-text {
-  color: #007bff;
+  color: #005eff;
   font-size: 16px;
+  font-weight: 500;
 }
 
 .error-message {
@@ -126,12 +150,17 @@
   padding: 6px 12px;
   border: none;
   border-radius: 5px;
-  background: #007bff;
+  background: #005eff;
   color: white;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-/* Dialog Box */
+.reload-btn:hover {
+  background: #0047c1;
+}
+
+/* ===== DIALOG BOX ===== */
 .dialog-box {
   position: fixed;
   top: 50%;
@@ -141,9 +170,9 @@
   padding: 25px 30px;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 1100;
   min-width: 300px;
-  max-width: 90%; /* responsive width */
+  max-width: 90%;
   text-align: center;
   animation: fadeIn 0.2s ease-in-out;
 }
@@ -165,7 +194,7 @@
   justify-content: center;
   gap: 15px;
   margin-top: 15px;
-  flex-wrap: wrap; /* wrap buttons on small screens */
+  flex-wrap: wrap;
 }
 
 .dialog-confirm,
@@ -186,7 +215,7 @@
 }
 
 .dialog-confirm:hover {
-  background: #43a047;
+  background: #218838;
 }
 
 .dialog-cancel {
@@ -209,11 +238,12 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  background: #0a4da2;
+  background: #005eff;
   color: #fff;
   font-weight: 600;
 }
 
+/* ===== DOWNLOAD BUTTON ===== */
 .download-btn {
   background: #28a745;
   color: #fff;
@@ -222,12 +252,14 @@
   padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .download-btn:hover {
-  background: #218838;
+  background: #1e7e34;
 }
 
+/* ===== ANIMATION ===== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -239,10 +271,16 @@
   }
 }
 
-/* === Responsive === */
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1280px) {
+  .users-container {
+    padding: 20px;
+  }
+}
+
 @media (max-width: 1024px) {
   .users-table {
-    min-width: 400px;
+    min-width: 600px;
   }
 }
 
@@ -253,8 +291,12 @@
     gap: 10px;
   }
 
+  .users-title {
+    font-size: 20px;
+  }
+
   .action-buttons {
-    gap: 5px;
+    gap: 6px;
   }
 
   .users-table th,
@@ -273,11 +315,16 @@
   .dialog-box {
     padding: 20px;
   }
+
+  .users-table-container {
+    padding: 12px;
+  }
 }
 
 @media (max-width: 480px) {
   .users-table-container {
     overflow-x: auto;
+    padding: 10px;
   }
 
   .users-table th,
