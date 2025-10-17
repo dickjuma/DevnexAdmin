@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+// src/pages/admin/Admin.jsx
+import React, { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+
+// Components
 import Sidebar from "../../components/sidebar/Sidebar";
 import Addproduct from "../../components/AddProduct/Addproduct";
 import Table from "../../components/table/Table";
@@ -12,65 +15,62 @@ import Login from "../../components/Adminlogin/Login";
 import InvoiceGenerator from "../../components/Invoice/Invoice";
 import ReceiptGenerator from "../../components/Reciet/Reciept";
 import Auto from "../../components/AutoGenerator/Auto";
-import logo from "../../assets/account.png";
 
+// Assets & CSS
+import logo from "../../assets/account.png";
 import "./admin.css";
 
 const Admin = () => {
-  const [screenSize, setScreenSize] = useState("desktop");
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed] = useState(false); // optional for future
+  const navigate = useNavigate();
 
-  // Listen to sidebar expansion from Sidebar.js via event
-  useEffect(() => {
-    const handleSidebarToggle = (e) => {
-      setIsSidebarExpanded(e.detail === "expanded");
-    };
-    window.addEventListener("sidebarToggle", handleSidebarToggle);
-    return () => window.removeEventListener("sidebarToggle", handleSidebarToggle);
-  }, []);
-
-  // Detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width > 1024) setScreenSize("desktop");
-      else if (width > 768) setScreenSize("tablet");
-      else setScreenSize("mobile");
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const handleLinkClick = (path) => {
+    setSidebarOpen(false); // close on mobile
+    navigate(path);
+  };
 
   return (
-    <div className={`admin-wrapper ${isSidebarExpanded ? "sidebar-expanded" : ""}`}>
-      {/* ===== SIDEBAR ===== */}
-      <Sidebar />
+    <div
+      className={`admin-container ${sidebarOpen ? "sidebar-open" : ""} ${
+        sidebarCollapsed ? "sidebar-collapsed" : ""
+      }`}
+    >
+      {/* Sidebar */}
+      <Sidebar className={sidebarOpen ? "show" : ""} onLinkClick={handleLinkClick} />
 
-      {/* ===== MAIN CONTENT ===== */}
+      {/* Overlay */}
+      {sidebarOpen && window.innerWidth <= 768 && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
+      {/* Main Content */}
       <main className="admin-main">
-        {/* ===== NAVBAR ===== */}
+        {/* Navbar */}
         <nav className="navbar">
           <div className="nav-left">
+            {/* Hamburger for mobile */}
+            <div className="hamburger" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
             <img src={logo} alt="Logo" className="nav-logo" />
-            <h2 className="brand-name">Dickson Juma</h2>
+            <div className="brand-name">Dickson Juma</div>
           </div>
-          <div className="nav-center">
-            <p className="nav-greeting">Hello, Welcome Back Admin!</p>
-          </div>
+          <div className="nav-center">Hello, Welcome Back Admin!</div>
         </nav>
 
-        {/* ===== HEADER ===== */}
+        {/* Header */}
         <header className="admin-header">
-          <div className="admin-header-content">
-            <h1 className="admin-title">Admin Dashboard Panel</h1>
-            <p className="admin-subtitle">
-              Manage Products, Orders, and Users — all in one place.
-            </p>
-          </div>
+          <h1 className="admin-title">Admin Dashboard Panel</h1>
+          <p className="admin-subtitle">
+            Manage Products, Orders, and Users — all in one place.
+          </p>
         </header>
 
-        {/* ===== PAGE CONTENT ===== */}
+        {/* Content */}
         <section className="admin-content">
           <Routes>
             <Route path="/addproduct" element={<Addproduct />} />
@@ -89,10 +89,7 @@ const Admin = () => {
               element={
                 <div className="admin-welcome">
                   <h2>Welcome to the Admin Control Center</h2>
-                  <p>
-                    Use the sidebar to navigate between management tools and
-                    keep your platform up to date.
-                  </p>
+                  <p>Use the sidebar to navigate between management tools and keep your platform up to date.</p>
                 </div>
               }
             />
