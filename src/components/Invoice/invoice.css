@@ -1,12 +1,14 @@
-
+/* ===== BASE ===== */
 body {
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
   background: #f7f8fa;
   color: #333;
+  overflow-x: hidden;
 }
 
+/* ===== CONTAINER ===== */
 .invoice-container {
   max-width: 900px;
   margin: 30px auto;
@@ -14,6 +16,9 @@ body {
   border-radius: 10px;
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
   padding: 25px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
 }
 
 .heading {
@@ -53,14 +58,17 @@ select.unpaid {
   border-color: red;
 }
 
+/* ===== ITEMS TABLE ===== */
 .items-section {
   margin-top: 15px;
+  overflow-x: auto; /* allows scroll on small screens */
 }
 
 .invoice-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  min-width: 600px; /* ensures columns stay visible */
 }
 
 .invoice-table th,
@@ -68,6 +76,7 @@ select.unpaid {
   border: 1px solid #eee;
   padding: 8px 10px;
   text-align: left;
+  white-space: nowrap;
 }
 
 .invoice-table th {
@@ -75,6 +84,7 @@ select.unpaid {
   font-weight: 600;
 }
 
+/* ===== BUTTONS ===== */
 .add-btn,
 .remove-btn,
 .action-buttons button,
@@ -110,6 +120,7 @@ select.unpaid {
 
 .action-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 20px;
 }
@@ -117,6 +128,8 @@ select.unpaid {
 .action-buttons button {
   background: #007bff;
   color: #fff;
+  flex: 1;
+  min-width: 120px;
 }
 
 .action-buttons button:nth-child(2) {
@@ -127,7 +140,7 @@ select.unpaid {
   opacity: 0.85;
 }
 
-
+/* ===== PREVIEW MODAL ===== */
 .preview-modal {
   position: fixed;
   inset: 0;
@@ -153,6 +166,7 @@ select.unpaid {
 .preview-actions {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 20px 0 40px;
 }
@@ -170,6 +184,7 @@ select.unpaid {
   opacity: 0.85;
 }
 
+/* ===== INVOICE STRUCTURE ===== */
 .invoice-header {
   display: flex;
   justify-content: space-between;
@@ -177,6 +192,7 @@ select.unpaid {
   border-bottom: 2px solid #eee;
   padding-bottom: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 .invoice-header h1 {
@@ -243,10 +259,25 @@ select.unpaid {
   border: 1px solid #b30000;
 }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .invoice-container {
+    margin: 20px;
+    padding: 20px;
+  }
+}
 
 @media (max-width: 768px) {
+  .invoice-container {
+    margin: 90px 15px 25px; /* pushes below navbar/sidebar */
+    padding: 18px;
+    max-width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
   .invoice-header {
     flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
   }
 
@@ -261,5 +292,24 @@ select.unpaid {
   .invoice-table th,
   .invoice-table td {
     font-size: 14px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons button {
+    width: 100%;
+  }
+}
+
+/* ===== ENSURE CONTENT NEVER HIDES BEHIND SIDEBAR ===== */
+@media (max-width: 768px) {
+  .admin-main .invoice-container {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .admin-sidebar.show ~ .admin-main .invoice-container {
+    transform: translateX(180px); /* slide right slightly when sidebar open */
   }
 }

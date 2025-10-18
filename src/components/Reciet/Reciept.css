@@ -7,8 +7,28 @@ body {
   padding: 0;
 }
 
+/* Wrap all page content inside admin layout area */
+.admin-content {
+  margin-left: 250px; /* Sidebar width for desktop */
+  padding: 80px 20px 20px; /* space for fixed top bar */
+  transition: margin-left 0.3s ease;
+}
+
+.admin-content.sidebar-collapsed {
+  margin-left: 70px; /* when sidebar collapses */
+}
+
+/* Adjust layout for mobile when sidebar is hidden */
+@media (max-width: 992px) {
+  .admin-content {
+    margin-left: 0;
+    padding-top: 70px;
+  }
+}
+
+/* === Receipt Page Main Container === */
 .receipt-app {
-  padding: 20px;
+  width: 100%;
 }
 
 .receipt-main-container {
@@ -23,7 +43,7 @@ body {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
 }
 
@@ -34,7 +54,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 500px; /* ensures table has a baseline width */
+  min-width: 500px;
 }
 
 th, td {
@@ -68,7 +88,7 @@ th {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .form-section input,
@@ -169,6 +189,7 @@ button.refresh {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .close-btn {
@@ -187,15 +208,21 @@ button.refresh {
 }
 
 @media (max-width: 768px) {
+  .admin-content {
+    padding: 70px 15px 15px;
+  }
+
   .receipt-main-container {
     flex-direction: column;
   }
 
-  .table-section, .form-section {
+  .table-section,
+  .form-section {
     padding: 15px;
   }
 
-  table th, table td {
+  table th,
+  table td {
     padding: 8px;
     font-size: 13px;
   }
@@ -212,10 +239,6 @@ button.refresh {
     margin-top: 5px;
   }
 
-  .preview-actions {
-    justify-content: center;
-  }
-
   button {
     padding: 8px 12px;
     font-size: 13px;
@@ -223,11 +246,13 @@ button.refresh {
 }
 
 @media (max-width: 480px) {
-  .table-section, .form-section {
+  .table-section,
+  .form-section {
     padding: 10px;
   }
 
-  table th, table td {
+  table th,
+  table td {
     padding: 6px;
     font-size: 12px;
   }

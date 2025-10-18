@@ -262,3 +262,24 @@
   .navbar { justify-content: center; }
   .admin-content { padding: 20px 15px; }
 }
+/* ===== FIX: Prevent overlap under navbar on mobile ===== */
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    margin-top: 60px; /* pushes content below navbar height */
+    height: calc(100vh - 60px); /* ensures content fits screen */
+  }
+
+  .navbar {
+    position: fixed; /* keep navbar always visible */
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .admin-content {
+    height: calc(100vh - 120px); /* adjust scroll area */
+    overflow-y: auto;
+  }
+}
