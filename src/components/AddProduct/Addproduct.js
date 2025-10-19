@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./addproduct.css";
 import uploadimg from "../../assets/upload.png";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -53,7 +54,7 @@ const Addproduct = () => {
         return;
       }
 
-      // Add product with image URL
+      // Add product with uploaded image URL
       const productResp = await fetch(`${API_URL}/addproduct`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,11 +77,11 @@ const Addproduct = () => {
         });
         setImage(null);
       } else {
-        toast.error("Failed to add product. Please try again.");
+        toast.error(productData.message || "Failed to add product. Please try again.");
       }
     } catch (error) {
       console.error("Add product error:", error);
-      toast.error("An error occurred while adding the product.");
+      toast.error("Server not responding. Check your backend connection.");
     } finally {
       setLoading(false);
     }
@@ -167,6 +168,7 @@ const Addproduct = () => {
           </button>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
