@@ -29,14 +29,14 @@ const Addproduct = () => {
     const { name, description, quantity, price } = productDetails;
 
     if (!name || !description || !quantity || !price || !image) {
-      toast.error("Please fill in all fields and upload an image.");
+      toast.error("⚠️ Please fill in all fields and upload an image.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Upload image first
+      // Upload image
       const formData = new FormData();
       formData.append("product", image);
 
@@ -49,12 +49,12 @@ const Addproduct = () => {
       const uploadData = await uploadResp.json();
 
       if (!uploadData.success) {
-        toast.error("Image upload failed. Please try again.");
+        toast.error("❌ Image upload failed. Try again.");
         setLoading(false);
         return;
       }
 
-      // Add product with uploaded image URL
+      // Add product
       const productResp = await fetch(`${API_URL}/addproduct`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,46 +77,46 @@ const Addproduct = () => {
         });
         setImage(null);
       } else {
-        toast.error(productData.message || "Failed to add product. Please try again.");
+        toast.error(productData.message || "❌ Failed to add product.");
       }
     } catch (error) {
       console.error("Add product error:", error);
-      toast.error("Server not responding. Check your backend connection.");
+      toast.error("🚫 Server not responding. Check your backend.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="add-product">
-      <h1 className="addproduct-title">Add a New Product</h1>
+    <div className="addproduct-wrapper">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      <div className="addproduct-header">
+        <h1>Add a New Product</h1>
+        <p>Upload, describe, and price your new item below.</p>
+      </div>
 
-      <div className="addproduct-container">
-        {/* Product Image Upload */}
+      <div className="addproduct-card">
+        {/* Upload Section */}
         <div className="addproduct-image-section">
           <label htmlFor="file-input">
-            <img
-              src={image ? URL.createObjectURL(image) : uploadimg}
-              alt="Preview"
-              className="addproduct-image"
-            />
+            <div className="upload-box">
+              <img
+                src={image ? URL.createObjectURL(image) : uploadimg}
+                alt="Preview"
+                className="addproduct-image"
+              />
+            </div>
           </label>
-          <input
-            type="file"
-            name="image"
-            id="file-input"
-            hidden
-            onChange={handleImage}
-          />
+          <input type="file" id="file-input" hidden onChange={handleImage} />
           <p className="addproduct-imgtext">
             {image ? image.name : "Click to upload product image"}
           </p>
         </div>
 
-        {/* Product Details */}
+        {/* Product Form */}
         <div className="addproduct-form">
-          <div className="addproduct-itemfield">
-            <p>Product Name</p>
+          <div className="form-group">
+            <label>Product Name</label>
             <input
               type="text"
               name="name"
@@ -126,8 +126,8 @@ const Addproduct = () => {
             />
           </div>
 
-          <div className="addproduct-itemfield">
-            <p>Description</p>
+          <div className="form-group">
+            <label>Description</label>
             <textarea
               name="description"
               placeholder="Enter product details or features..."
@@ -137,26 +137,28 @@ const Addproduct = () => {
             ></textarea>
           </div>
 
-          <div className="addproduct-itemfield">
-            <p>Quantity</p>
-            <input
-              type="number"
-              name="quantity"
-              placeholder="e.g., 25"
-              value={productDetails.quantity}
-              onChange={handleChange}
-            />
-          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Quantity</label>
+              <input
+                type="number"
+                name="quantity"
+                placeholder="e.g., 25"
+                value={productDetails.quantity}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="addproduct-itemfield">
-            <p>Price (KES)</p>
-            <input
-              type="number"
-              name="price"
-              placeholder="e.g., 1200"
-              value={productDetails.price}
-              onChange={handleChange}
-            />
+            <div className="form-group">
+              <label>Price (KES)</label>
+              <input
+                type="number"
+                name="price"
+                placeholder="e.g., 1200"
+                value={productDetails.price}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           <button
@@ -164,11 +166,10 @@ const Addproduct = () => {
             onClick={Add_product}
             disabled={loading}
           >
-            {loading ? "Adding..." : "Add Product"}
+            {loading ? "Adding Product..." : "Add Product"}
           </button>
         </div>
       </div>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

@@ -1,112 +1,177 @@
+/* === Add Service Main Container === */
 .add-service {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
+  padding: 30px 50px;
+  background-color: #f7f8fa;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  color: #333;
 }
 
 .addservice-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #004aad;
+  font-size: 28px;
+  font-weight: 600;
+  color: #222;
   margin-bottom: 30px;
   text-align: center;
 }
 
+/* === Service Container (Card) === */
 .addservice-container {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 30px 40px;
   gap: 40px;
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 1100px;
+  max-width: 1000px;
+  margin: 0 auto;
+  transition: 0.3s ease;
 }
 
+/* === Image Upload Section === */
 .addservice-image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex: 1;
+  text-align: center;
+  border-right: 1px solid #eee;
+  padding-right: 40px;
 }
 
 .addservice-image {
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   border-radius: 12px;
   cursor: pointer;
+  transition: all 0.3s ease;
   border: 2px dashed #ccc;
-  transition: all 0.3s ease-in-out;
+  background-color: #fafafa;
 }
 
 .addservice-image:hover {
-  border-color: #004aad;
-  transform: scale(1.02);
+  transform: scale(1.05);
+  border-color: #007bff;
 }
 
 .addservice-imgtext {
-  margin-top: 10px;
   font-size: 14px;
-  color: #666;
+  color: #777;
+  margin-top: 10px;
 }
 
+/* === Form Section === */
 .addservice-form {
+  flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  max-width: 500px;
+  gap: 20px;
+}
+
+.addservice-itemfield {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .addservice-itemfield p {
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 3px;
   color: #333;
-  margin-bottom: 6px;
 }
 
 .addservice-itemfield input,
 .addservice-itemfield textarea {
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 15px;
-  transition: all 0.2s;
+  background: #f9f9f9;
+  transition: 0.3s ease;
+  outline: none;
 }
 
 .addservice-itemfield input:focus,
 .addservice-itemfield textarea:focus {
-  border-color: #004aad;
-  outline: none;
+  border-color: #007bff;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
 }
 
+.addservice-itemfield textarea {
+  resize: none;
+}
+
+/* === Submit Button === */
 .addservice-btn {
-  padding: 12px 16px;
-  background-color: #004aad;
+  width: 200px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #007bff, #0056d2);
+  border: none;
   color: white;
   font-weight: 600;
-  border: none;
-  border-radius: 10px;
+  font-size: 15px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
+  align-self: flex-start;
 }
 
 .addservice-btn:hover {
-  background-color: #003b88;
+  background: linear-gradient(135deg, #0056d2, #003d99);
+  transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
+.addservice-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* === Toastify (Optional Styling) === */
+.Toastify__toast {
+  border-radius: 8px !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* === Responsive Design === */
+@media (max-width: 900px) {
   .addservice-container {
     flex-direction: column;
-    align-items: center;
+    padding: 25px;
+    gap: 30px;
+  }
+
+  .addservice-image-section {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+
+  .addservice-btn {
+    width: 100%;
+    align-self: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .add-service {
+    padding: 20px;
+  }
+
+  .addservice-title {
+    font-size: 22px;
   }
 
   .addservice-image {
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
+  }
+
+  .addservice-container {
+    padding: 20px;
   }
 }
