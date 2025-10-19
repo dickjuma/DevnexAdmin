@@ -21,6 +21,14 @@ body {
   transition: all 0.3s ease;
 }
 
+/* Keep content visible under admin layout */
+@media (min-width: 992px) {
+  .invoice-container {
+    margin-left: 260px; /* matches sidebar width */
+    margin-top: 90px; /* below navbar */
+  }
+}
+
 .heading {
   text-align: center;
   font-weight: 600;
@@ -61,14 +69,14 @@ select.unpaid {
 /* ===== ITEMS TABLE ===== */
 .items-section {
   margin-top: 15px;
-  overflow-x: auto; /* allows scroll on small screens */
+  overflow-x: auto;
 }
 
 .invoice-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  min-width: 600px; /* ensures columns stay visible */
+  min-width: 600px;
 }
 
 .invoice-table th,
@@ -144,8 +152,8 @@ select.unpaid {
 .preview-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 9999;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 5000;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -153,14 +161,29 @@ select.unpaid {
   overflow-y: auto;
 }
 
+/* Adjusted to respect admin layout */
 .preview-box {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 30px;
+  width: 90%;
   max-width: 850px;
-  width: 100%;
-  margin-top: 40px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+  overflow-x: auto;
+  margin-top: 100px; /* space below navbar */
+  margin-left: 250px; /* sidebar gap on desktop */
+  transition: all 0.3s ease;
+  z-index: 5100;
+}
+
+/* Center nicely when sidebar hidden (mobile) */
+@media (max-width: 992px) {
+  .preview-box {
+    margin-left: 0;
+    width: 95%;
+    margin-top: 120px;
+    padding: 20px;
+  }
 }
 
 .preview-actions {
@@ -168,7 +191,7 @@ select.unpaid {
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 20px 0 40px;
+  margin: 20px 0 30px;
 }
 
 .preview-actions button {
@@ -260,16 +283,9 @@ select.unpaid {
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .invoice-container {
-    margin: 20px;
-    padding: 20px;
-  }
-}
-
 @media (max-width: 768px) {
   .invoice-container {
-    margin: 90px 15px 25px; /* pushes below navbar/sidebar */
+    margin: 90px 15px 25px;
     padding: 18px;
     max-width: 100%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -285,10 +301,6 @@ select.unpaid {
     text-align: left;
   }
 
-  .preview-box {
-    padding: 20px;
-  }
-
   .invoice-table th,
   .invoice-table td {
     font-size: 14px;
@@ -301,15 +313,9 @@ select.unpaid {
   .action-buttons button {
     width: 100%;
   }
-}
 
-/* ===== ENSURE CONTENT NEVER HIDES BEHIND SIDEBAR ===== */
-@media (max-width: 768px) {
-  .admin-main .invoice-container {
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .admin-sidebar.show ~ .admin-main .invoice-container {
-    transform: translateX(180px); /* slide right slightly when sidebar open */
+  .preview-box {
+    width: 95%;
+    margin-top: 100px;
   }
 }
