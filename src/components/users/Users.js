@@ -5,13 +5,18 @@ import cross from "../../assets/cross.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./users.css";
-const API_URL = process.env.REACT_APP_API_URL;
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [demoMode, setDemoMode] = useState(false);
   const [dialog, setDialog] = useState({ show: false, message: "", onConfirm: null });
+
+  // ✅ Auto-switch between local and Render backend
+  const API_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:4000"
+      : "https://devnexbackend-4.onrender.com";
 
   // Demo data
   const demoUsers = [
@@ -20,130 +25,126 @@ const Users = () => {
     { _id: "demo-003", name: "Sarah Njeri", email: "sarah.njeri@example.com", password: "qwerty", blacklisted: false },
   ];
 
-  // Fetch users
+  // ✅ Fetch users safely
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/userdetails`);
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const res = await fetch(`${API_URL}/userdetails`, { method: "GET" });
+
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
       const data = await res.json();
-      setUsers(Array.isArray(data) && data.length ? data : demoUsers);
-      if (!Array.isArray(data) || data.length === 0) {
-        toast.info("⚠️ No users found. Showing demo data.");
+
+      if (Array.isArray(data) && data.length > 0) {
+        setUsers(data);
+        toast.success("✅ Users loaded successfully");
       } else {
-        toast.success("Users fetched successfully!");
+        setUsers(demoUsers);
+        toast.info("⚠️ No users found. Showing demo data.");
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("⚠️ Cannot connect to the server. Showing demo data.");
+    } catch (error) {
+      console.error("❌ Fetch error:", error);
       setUsers(demoUsers);
+      toast.error("⚠️ Unable to connect to the server. Showing demo data.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Dialog helpers
+  // ✅ Confirm dialog handlers
   const showDialog = (message, onConfirm = null) => setDialog({ show: true, message, onConfirm });
   const closeDialog = () => setDialog({ show: false, message: "", onConfirm: null });
 
-  // Delete user (updates UI instantly)
+  // ✅ Delete user (handles local/demo/prod)
   const removeUser = (_id, name) => {
     showDialog(`Are you sure you want to delete user "${name}"?`, async () => {
       closeDialog();
 
       if (demoMode) {
-        setUsers(users.filter((u) => u._id !== _id));
+        setUsers((prev) => prev.filter((u) => u._id !== _id));
         toast.info(`🗑️ Demo: "${name}" removed`);
         return;
       }
 
       try {
-        const res = await fetch("http://localhost:4000/deleteuser", {
+        const res = await fetch(`${API_URL}/deleteuser`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: _id }),
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to delete user");
+        if (!res.ok) throw new Error(data.message || "Failed to delete user.");
 
         setUsers((prev) => prev.filter((u) => u._id !== _id));
-        toast.success(`🗑️ ${data.message}`);
+        toast.success(`🗑️ ${data.message || "User deleted successfully."}`);
       } catch (err) {
-        console.error(err);
+        console.error("❌ Delete error:", err);
         toast.error(`❌ Failed to delete user: ${err.message}`);
       }
     });
   };
 
-  // Toggle blacklist (updates UI instantly)
+  // ✅ Toggle blacklist status (local + prod safe)
   const toggleBlacklist = (_id, name) => {
-  showDialog(`Are you sure you want to toggle blacklist status for "${name}"?`, async () => {
-    closeDialog();
+    showDialog(`Are you sure you want to toggle blacklist status for "${name}"?`, async () => {
+      closeDialog();
 
-    if (demoMode) {
-      setUsers((prev) =>
-        prev.map((u) => (u._id === _id ? { ...u, blacklisted: !u.blacklisted } : u))
-      );
-      toast.info(`🚫 Demo: "${name}" blacklist status toggled`);
-      return;
-    }
+      if (demoMode) {
+        setUsers((prev) =>
+          prev.map((u) => (u._id === _id ? { ...u, blacklisted: !u.blacklisted } : u))
+        );
+        toast.info(`🚫 Demo: "${name}" blacklist toggled`);
+        return;
+      }
 
-    try {
-      const res = await fetch("http://localhost:4000/blacklistuser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: _id }),
-      });
+      try {
+        const res = await fetch(`${API_URL}/blacklistuser`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: _id }),
+        });
 
-      const data = await res.json();
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to update blacklist.");
 
-      // Only throw if server returns an error status
-      if (!res.ok) throw new Error(data.message || "Failed to update blacklist.");
+        setUsers((prev) =>
+          prev.map((u) => (u._id === _id ? { ...u, blacklisted: !u.blacklisted } : u))
+        );
+        toast.success(data.message || `🚫 "${name}" blacklist updated.`);
+      } catch (err) {
+        console.error("❌ Blacklist error:", err);
+        toast.error(`❌ Failed to update blacklist: ${err.message}`);
+      }
+    });
+  };
 
-      // Update local state instantly
-      setUsers((prev) =>
-        prev.map((u) => (u._id === _id ? { ...u, blacklisted: !u.blacklisted } : u))
-      );
-
-      toast.success(data.message || `🚫 "${name}" blacklist status updated successfully!`);
-    } catch (err) {
-      console.error(err);
-      toast.error(`❌ Failed to update blacklist: ${err.message}`);
-    }
-  });
-};
-
-  // Fetch users on mount or demo mode change
+  // ✅ Fetch users when component mounts or demo mode changes
   useEffect(() => {
     if (demoMode) {
       setUsers(demoUsers);
-      setLoading(false);
       toast.info("ℹ️ Demo mode enabled.");
     } else {
       fetchUsers();
     }
   }, [demoMode]);
 
-  // CSV download
+  // ✅ CSV Download
   const downloadCSV = () => {
     if (!users.length) return toast.info("No data to download");
     const csvRows = [
       ["ID", "Full Name", "Email", "Blacklisted"],
       ...users.map((u) => [u._id, u.name, u.email, u.blacklisted ? "Yes" : "No"]),
     ];
-    const csvContent = csvRows.map((row) => row.join(",")).join("\n");
+    const csvContent = csvRows.map((r) => r.join(",")).join("\n");
     const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
+    a.href = URL.createObjectURL(blob);
     a.download = "users.csv";
     a.click();
-    URL.revokeObjectURL(url);
-    toast.success("CSV downloaded");
+    toast.success("📄 CSV downloaded");
   };
 
-  // PDF download
+  // ✅ PDF Download
   const downloadPDF = () => {
     if (!users.length) return toast.info("No data to download");
     const doc = new jsPDF();
@@ -155,7 +156,7 @@ const Users = () => {
       startY: 20,
     });
     doc.save("users.pdf");
-    toast.success("PDF downloaded");
+    toast.success("📄 PDF downloaded");
   };
 
   return (
@@ -206,7 +207,10 @@ const Users = () => {
                         className="delete-icon"
                         onClick={() => removeUser(user._id, user.name)}
                       />
-                      <button className="blacklist-btn" onClick={() => toggleBlacklist(user._id, user.name)}>
+                      <button
+                        className="blacklist-btn"
+                        onClick={() => toggleBlacklist(user._id, user.name)}
+                      >
                         🚫 Toggle Blacklist
                       </button>
                     </td>
