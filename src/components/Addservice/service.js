@@ -3,7 +3,9 @@ import "./service.css";
 import uploadimg from "../../assets/upload.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const API_URL = process.env.REACT_APP_API_URL;
+
 const Service = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,15 +15,13 @@ const Service = () => {
     price: "",
   });
 
-
   const handleChange = (e) => {
     setServiceDetails({ ...serviceDetails, [e.target.name]: e.target.value });
   };
 
   const handleImage = (e) => {
-    setImage(e.target.files[0]);
+    if (e.target.files[0]) setImage(e.target.files[0]);
   };
-
 
   const addService = async () => {
     const { name, description, price } = serviceDetails;
@@ -34,7 +34,7 @@ const Service = () => {
     setLoading(true);
 
     try {
-    
+      // Upload service image
       const formData = new FormData();
       formData.append("service", image);
 
@@ -47,38 +47,35 @@ const Service = () => {
       const uploadData = await uploadResp.json();
 
       if (!uploadData?.success) {
-        toast.error(" Image upload failed. Try again.");
+        toast.error("❌ Image upload failed. Try again.");
         setLoading(false);
         return;
       }
 
-      
-      const newService = {
-        name,
-        description, 
-        image: uploadData.image_url,
-      };
-
-      const response = await fetch(`${API_URL}/addservice`, {
+      // Add service with uploaded image URL
+      const serviceResp = await fetch(`${API_URL}/addservice`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newService),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...serviceDetails,
+          image: uploadData.image_url,
+        }),
       });
 
-      const data = await response.json();
+      const serviceData = await serviceResp.json();
 
-      if (data?.success) {
+      if (serviceData?.success) {
         toast.success("🎉 Service added successfully!");
         setServiceDetails({ name: "", description: "", price: "" });
         setImage(null);
       } else {
-        toast.error(`Failed to add service: ${data?.message || "Unknown error"}`);
+        toast.error(
+          `❌ Failed to add service: ${serviceData?.message || "Unknown error"}`
+        );
       }
     } catch (error) {
       console.error("Add Service Error:", error);
-      toast.error("Server not responding. Check your backend connection.");
+      toast.error("⚠️ Server not responding. Check your backend connection.");
     } finally {
       setLoading(false);
     }
@@ -110,7 +107,7 @@ const Service = () => {
           </p>
         </div>
 
-        {}
+        {/* Service Details */}
         <div className="addservice-form">
           <div className="addservice-itemfield">
             <p>Service Name</p>
@@ -155,7 +152,6 @@ const Service = () => {
         </div>
       </div>
 
-      {}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );

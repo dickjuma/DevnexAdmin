@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import "./addproduct.css";
 import uploadimg from "../../assets/upload.png";
 import { toast } from "react-toastify";
+
 const API_URL = process.env.REACT_APP_API_URL;
+
 const Addproduct = () => {
-  const [image, setImage] = useState(false);
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [productDetails, setProductDetails] = useState({
     name: "",
@@ -31,10 +33,10 @@ const Addproduct = () => {
     }
 
     setLoading(true);
+
     try {
-      let responseData;
-      let product = productDetails;
-      let formData = new FormData();
+      // Upload image first
+      const formData = new FormData();
       formData.append("product", image);
 
       const uploadResp = await fetch(`${API_URL}/upload`, {
@@ -42,39 +44,42 @@ const Addproduct = () => {
         headers: { Accept: "application/json" },
         body: formData,
       });
-      responseData = await uploadResp.json();
 
-      if (responseData.success) {
-        product.image = responseData.image_url;
+      const uploadData = await uploadResp.json();
 
-        const productResp = await fetch(`${API_URL}/addproduct`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(product),
+      if (!uploadData.success) {
+        toast.error("Image upload failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Add product with image URL
+      const productResp = await fetch(`${API_URL}/addproduct`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...productDetails,
+          image: uploadData.image_url,
+        }),
+      });
+
+      const productData = await productResp.json();
+
+      if (productData.success) {
+        toast.success("🎉 Product added successfully!");
+        setProductDetails({
+          name: "",
+          description: "",
+          quantity: "",
+          price: "",
+          image: "",
         });
-
-        const data = await productResp.json();
-        if (data.success) {
-          toast.success("🎉 Product added successfully!");
-          setProductDetails({
-            name: "",
-            description: "",
-            quantity: "",
-            price: "",
-            image: "",
-          });
-          setImage(false);
-        } else {
-          toast.error("Failed to add product. Please try again.");
-        }
+        setImage(null);
       } else {
-        toast.error("Image upload failed.");
+        toast.error("Failed to add product. Please try again.");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Add product error:", error);
       toast.error("An error occurred while adding the product.");
     } finally {
       setLoading(false);
