@@ -16,32 +16,36 @@ import {
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const API_URL = process.env.REACT_APP_API_URL;
+
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalServices: 0,
     totalOrders: 0,
+    totalProducts: 0,
     totalPayments: 0,
-    fraudPayments: 0,
-    confirmedPayments: 0,
-    pendingOrders: 0,
-    confirmedOrders: 0,
-    cancelledOrders: 0,
+    fraudPayments: 1,
+    confirmedPayments: 1,
+    pendingOrders: 1,
+    confirmedOrders: 1,
+    cancelledOrders: 1,
     latestService: null,
     latestOrder: null,
-    growth: 0,
+    growth: 1,
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [useSample, setUseSample] = useState(false);
 
- 
+  // === Sample fallback data (offline mode) ===
   const sampleData = {
     totalUsers: 1245,
     totalServices: 63,
     totalOrders: 840,
+    totalProducts: 54,
     totalPayments: 650,
     fraudPayments: 6,
     confirmedPayments: 600,
@@ -53,6 +57,7 @@ const Dashboard = () => {
     latestOrder: { userId: "Jane Doe", date: new Date() },
   };
 
+  // === Fetch data from backend ===
   const fetchStats = async (showToast = false) => {
     if (useSample) {
       setStats(sampleData);
@@ -67,12 +72,28 @@ const Dashboard = () => {
     if (showToast) toast.info("Refreshing dashboard data...");
 
     try {
-      const res = await axios.get(`${API_URL}/stats`, {
-        timeout: 8000,
-      });
+      const res = await axios.get(`${API_URL}/dashboard-stats`, { timeout: 8000 });
 
       if (res.data.success) {
-        setStats(res.data);
+        const data = res.data.data;
+
+        // Fill missing fields with defaults (1)
+        setStats({
+          totalUsers: data.totalUsers || 1,
+          totalOrders: data.totalOrders || 1,
+          totalServices: data.totalServices || 1,
+          totalProducts: data.totalProducts || 1,
+          totalPayments: data.totalPayments || 1,
+          fraudPayments: 1,
+          confirmedPayments: 1,
+          pendingOrders: 1,
+          confirmedOrders: 1,
+          cancelledOrders: 1,
+          growth: 1,
+          latestService: data.latestService || null,
+          latestOrder: data.latestOrder || null,
+        });
+
         showToast && toast.success("✅ Dashboard data updated!");
       } else {
         throw new Error(res.data.message || "Server returned no data");
@@ -82,7 +103,7 @@ const Dashboard = () => {
       setError("⚠️ Failed to connect to backend. Switched to sample mode.");
       setStats(sampleData);
       setUseSample(true);
-      toast.warning("⚠️ Backend unreachable. Switched to sample data.");
+      toast.warning("⚠️ Backend unreachable. Using sample data.");
     } finally {
       setLoading(false);
     }
@@ -96,11 +117,12 @@ const Dashboard = () => {
     <div className="dashboard">
       <ToastContainer position="top-right" autoClose={3000} />
 
+      {/* === Header === */}
       <div className="dashboard-header">
         <div>
           <h1 className="dashboard-title">📊 Admin Dashboard Overview</h1>
           <p className="dashboard-subtitle">
-            Real-time tracking of users, orders, payments & growth
+            Real-time tracking of users, services, products & orders
           </p>
         </div>
 
@@ -124,6 +146,7 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* === Loading State === */}
       {loading ? (
         <div className="dashboard-loading">
           <div className="spinner"></div>
@@ -133,132 +156,55 @@ const Dashboard = () => {
         <>
           {error && <p className="dashboard-warning">{error}</p>}
 
+          {/* === Stats Cards === */}
           <div className="dashboard-cards">
             <div className="card stat-users">
-              <div className="icon">
-                <Users size={28} />
-              </div>
+              <Users size={28} />
               <div className="stat-info">
-                <h3>{stats.totalUsers.toLocaleString()}</h3>
+                <h3>{stats.totalUsers}</h3>
                 <p>Registered Users</p>
               </div>
             </div>
 
             <div className="card stat-services">
-              <div className="icon">
-                <Package size={28} />
-              </div>
+              <Package size={28} />
               <div className="stat-info">
-                <h3>{stats.totalServices.toLocaleString()}</h3>
+                <h3>{stats.totalServices}</h3>
                 <p>Total Services</p>
               </div>
             </div>
 
-            <div className="card stat-orders">
-              <div className="icon">
-                <ShoppingBag size={28} />
-              </div>
+            <div className="card stat-products">
+              <ShoppingBag size={28} />
               <div className="stat-info">
-                <h3>{stats.totalOrders.toLocaleString()}</h3>
+                <h3>{stats.totalProducts}</h3>
+                <p>Total Products</p>
+              </div>
+            </div>
+
+            <div className="card stat-orders">
+              <Clock size={28} />
+              <div className="stat-info">
+                <h3>{stats.totalOrders}</h3>
                 <p>Total Orders</p>
               </div>
             </div>
 
             <div className="card stat-revenue">
-              <div className="icon">
-                <CreditCard size={28} />
-              </div>
+              <CreditCard size={28} />
               <div className="stat-info">
-                <h3>{stats.totalPayments.toLocaleString()}</h3>
-                <p>Payments Made</p>
-              </div>
-            </div>
-
-            <div className="card stat-confirmed">
-              <div className="icon">
-                <CheckCircle size={28} />
-              </div>
-              <div className="stat-info">
-                <h3>{stats.confirmedPayments}</h3>
-                <p>Confirmed Payments</p>
-              </div>
-            </div>
-
-            <div className="card stat-fraud">
-              <div className="icon">
-                <AlertTriangle size={28} />
-              </div>
-              <div className="stat-info">
-                <h3>{stats.fraudPayments}</h3>
-                <p>Fraud Payments</p>
-              </div>
-            </div>
-
-            <div className="card stat-pending">
-              <div className="icon">
-                <Clock size={28} />
-              </div>
-              <div className="stat-info">
-                <h3>{stats.pendingOrders}</h3>
-                <p>Pending Orders</p>
-              </div>
-            </div>
-
-            <div className="card stat-confirmed">
-              <div className="icon">
-                <CheckCircle size={28} />
-              </div>
-              <div className="stat-info">
-                <h3>{stats.confirmedOrders}</h3>
-                <p>Confirmed Orders</p>
-              </div>
-            </div>
-
-            <div className="card stat-cancelled">
-              <div className="icon">
-                <XCircle size={28} />
-              </div>
-              <div className="stat-info">
-                <h3>{stats.cancelledOrders}</h3>
-                <p>Cancelled Orders</p>
+                <h3>{stats.totalPayments}</h3>
+                <p>Total Payments</p>
               </div>
             </div>
 
             <div className="card stat-growth">
-              <div className="icon">
-                <TrendingUp size={28} />
-              </div>
+              <TrendingUp size={28} />
               <div className="stat-info">
                 <h3>+{stats.growth}%</h3>
                 <p>Monthly Growth</p>
               </div>
             </div>
-
-            {stats.latestService && (
-              <div className="card stat-latest">
-                <div className="icon">
-                  <Package size={28} />
-                </div>
-                <div className="stat-info">
-                  <h3>{stats.latestService.name}</h3>
-                  <p>Latest Added Service</p>
-                </div>
-              </div>
-            )}
-
-            {stats.latestOrder && (
-              <div className="card stat-latest">
-                <div className="icon">
-                  <Clock size={28} />
-                </div>
-                <div className="stat-info">
-                  <h3>
-                    {new Date(stats.latestOrder.date).toLocaleDateString()}
-                  </h3>
-                  <p>Latest Order Date</p>
-                </div>
-              </div>
-            )}
           </div>
         </>
       )}
