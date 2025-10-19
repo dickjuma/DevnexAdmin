@@ -2,7 +2,7 @@
 body {
   font-family: "Inter", sans-serif;
   background: #f7f8fa;
-  color: #222;
+  color: #111; /* darker for better contrast */
   margin: 0;
   padding: 0;
 }
@@ -12,6 +12,7 @@ body {
   margin-left: 250px; /* Sidebar width for desktop */
   padding: 80px 20px 20px; /* space for fixed top bar */
   transition: margin-left 0.3s ease;
+  color: #111; /* ensure text visible in content area */
 }
 
 .admin-content.sidebar-collapsed {
@@ -29,26 +30,30 @@ body {
 /* === Receipt Page Main Container === */
 .receipt-app {
   width: 100%;
+  color: #111; /* ensure readable text inside receipt area */
 }
 
 .receipt-main-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  color: #111;
 }
 
 /* === Table Section === */
 .table-section {
   flex: 1.5;
-  background: white;
+  background: #fff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   overflow-x: auto;
+  color: #111;
 }
 
 .table-section h2 {
   margin-bottom: 10px;
+  color: #111;
 }
 
 table {
@@ -57,21 +62,25 @@ table {
   min-width: 500px;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   border-bottom: 1px solid #eee;
   text-align: left;
   font-size: 14px;
+  color: #222; /* darker text in tables */
 }
 
 th {
   background: #f3f4f6;
+  color: #111;
 }
 
 .action-icon {
   cursor: pointer;
   margin-right: 10px;
   transition: 0.2s;
+  color: #333;
 }
 
 .action-icon.view:hover {
@@ -85,21 +94,29 @@ th {
 /* === Form Section === */
 .form-section {
   flex: 1;
-  background: white;
+  background: #fff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  color: #111;
+}
+
+.form-section label {
+  font-weight: 500;
+  color: #111;
 }
 
 .form-section input,
 .form-section textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #bbb; /* slightly darker for clarity */
   border-radius: 8px;
   margin-bottom: 10px;
   font-size: 14px;
   box-sizing: border-box;
+  color: #111; /* ensure text visible in inputs */
+  background: #fff;
 }
 
 textarea {
@@ -122,10 +139,11 @@ button {
   background: #007bff;
   color: #fff;
   transition: 0.2s;
+  font-weight: 500;
 }
 
 button:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 button.refresh {
@@ -153,6 +171,7 @@ button.refresh {
   width: 100%;
   max-width: 600px;
   box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+  color: #111;
 }
 
 .receipt-header {
@@ -160,6 +179,7 @@ button.refresh {
   justify-content: space-between;
   border-bottom: 2px solid #eee;
   padding-bottom: 10px;
+  color: #111;
 }
 
 .company-info h1 {
@@ -169,11 +189,13 @@ button.refresh {
 
 .receipt-meta {
   text-align: right;
+  color: #444;
 }
 
 .receipt-body {
   margin: 20px 0;
   line-height: 1.6;
+  color: #111;
 }
 
 .receipt-footer {
