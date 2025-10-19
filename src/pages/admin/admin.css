@@ -11,7 +11,7 @@
 
 /* ===== HAMBURGER MENU ===== */
 .hamburger {
-  display: none; /* hide on desktop */
+  display: none;
   flex-direction: column;
   justify-content: space-between;
   width: 22px;
@@ -43,7 +43,8 @@
   transform: translateX(0);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* main container does not scroll */
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .admin-sidebar.collapsed {
@@ -54,59 +55,37 @@
 .sidebar-menu {
   flex: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
-  padding: 20px 10px;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 15px; /* added right padding for spacing */
 }
 
-/* optional: pin settings at bottom */
-.sidebar-settings {
-  flex-shrink: 0;
-  padding: 15px 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-/* link items */
 .sidebar-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 15px;
+  padding: 10px 18px; /* increased padding for nicer spacing */
   margin: 6px 0;
   color: #e8e8e8;
   border-radius: 8px;
   transition: all 0.25s ease;
   text-decoration: none;
+  position: relative;
 }
 
 .sidebar-item:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.sidebar-item.active {
-  background: #ffffff;
-  color: #005eff;
-  font-weight: 600;
-}
-
-/* icons inside links */
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* scrollbars for sidebar menu */
-.sidebar-menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.4);
-  border-radius: 6px;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.7);
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #ffce00;
+  border-radius: 2px;
 }
 
 /* ===== MOBILE SIDEBAR ===== */
@@ -151,11 +130,9 @@
   width: calc(100% - 75px);
 }
 
-@media (max-width: 768px) {
-  .admin-main {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
+/* added small padding to right side for desktop content */
+.admin-main .admin-content {
+  padding-right: 20px;
 }
 
 /* ===== NAVBAR ===== */
@@ -261,25 +238,7 @@
   .brand-name { display: none; }
   .navbar { justify-content: center; }
   .admin-content { padding: 20px 15px; }
-}
-/* ===== FIX: Prevent overlap under navbar on mobile ===== */
-@media (max-width: 768px) {
-  .admin-main {
-    margin-left: 0 !important;
-    width: 100% !important;
-    margin-top: 60px; /* pushes content below navbar height */
-    height: calc(100vh - 60px); /* ensures content fits screen */
-  }
-
-  .navbar {
-    position: fixed; /* keep navbar always visible */
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .admin-content {
-    height: calc(100vh - 120px); /* adjust scroll area */
-    overflow-y: auto;
-  }
+  .admin-main { margin-left: 0 !important; width: 100% !important; margin-top: 60px; height: calc(100vh - 60px); }
+  .navbar { position: fixed; top: 0; left: 0; right: 0; }
+  .admin-content { height: calc(100vh - 120px); overflow-y: auto; }
 }

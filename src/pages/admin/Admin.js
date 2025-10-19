@@ -89,7 +89,10 @@ const Admin = () => {
               element={
                 <div className="admin-welcome">
                   <h2>Welcome to the Admin Control Center</h2>
-                  <p>Use the sidebar to navigate between management tools and keep your platform up to date.</p>
+                  <p>
+                    Use the sidebar to navigate between management tools and keep
+                    your platform up to date.
+                  </p>
                 </div>
               }
             />
