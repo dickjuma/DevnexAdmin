@@ -18,6 +18,8 @@ const Users = () => {
       ? "http://localhost:4000"
       : "https://devnexbackend-4.onrender.com";
 
+  console.log("🌐 Using API URL:", API_URL);
+
   // Demo data
   const demoUsers = [
     { _id: "demo-001", name: "Jane Mwangi", email: "jane.mwangi@example.com", password: "demo1234", blacklisted: false },
@@ -28,16 +30,22 @@ const Users = () => {
   // ✅ Fetch users safely
   const fetchUsers = async () => {
     setLoading(true);
+    console.log("⏳ Fetching users from:", `${API_URL}/userdetails`);
+
     try {
       const res = await fetch(`${API_URL}/userdetails`, { method: "GET" });
+      console.log("📡 Response status:", res.status, res.statusText);
 
       if (!res.ok) throw new Error(`Server responded with ${res.status}`);
       const data = await res.json();
+
+      console.log("✅ Raw data received:", data);
 
       if (Array.isArray(data) && data.length > 0) {
         setUsers(data);
         toast.success("✅ Users loaded successfully");
       } else {
+        console.warn("⚠️ No users found, using demo data instead");
         setUsers(demoUsers);
         toast.info("⚠️ No users found. Showing demo data.");
       }
@@ -47,6 +55,7 @@ const Users = () => {
       toast.error("⚠️ Unable to connect to the server. Showing demo data.");
     } finally {
       setLoading(false);
+      console.log("✅ Fetch complete");
     }
   };
 
@@ -60,12 +69,14 @@ const Users = () => {
       closeDialog();
 
       if (demoMode) {
+        console.log(`🗑️ Demo delete: ${name}`);
         setUsers((prev) => prev.filter((u) => u._id !== _id));
         toast.info(`🗑️ Demo: "${name}" removed`);
         return;
       }
 
       try {
+        console.log("🗑️ Deleting user:", _id);
         const res = await fetch(`${API_URL}/deleteuser`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -73,8 +84,9 @@ const Users = () => {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to delete user.");
+        console.log("🗑️ Delete response:", data);
 
+        if (!res.ok) throw new Error(data.message || "Failed to delete user.");
         setUsers((prev) => prev.filter((u) => u._id !== _id));
         toast.success(`🗑️ ${data.message || "User deleted successfully."}`);
       } catch (err) {
@@ -90,6 +102,7 @@ const Users = () => {
       closeDialog();
 
       if (demoMode) {
+        console.log(`🚫 Demo blacklist toggle for: ${name}`);
         setUsers((prev) =>
           prev.map((u) => (u._id === _id ? { ...u, blacklisted: !u.blacklisted } : u))
         );
@@ -98,6 +111,7 @@ const Users = () => {
       }
 
       try {
+        console.log("🚫 Updating blacklist for:", _id);
         const res = await fetch(`${API_URL}/blacklistuser`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -105,6 +119,8 @@ const Users = () => {
         });
 
         const data = await res.json();
+        console.log("🚫 Blacklist response:", data);
+
         if (!res.ok) throw new Error(data.message || "Failed to update blacklist.");
 
         setUsers((prev) =>
@@ -120,6 +136,7 @@ const Users = () => {
 
   // ✅ Fetch users when component mounts or demo mode changes
   useEffect(() => {
+    console.log("🔁 useEffect triggered. Demo mode:", demoMode);
     if (demoMode) {
       setUsers(demoUsers);
       toast.info("ℹ️ Demo mode enabled.");
