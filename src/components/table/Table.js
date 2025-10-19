@@ -6,6 +6,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "./table.css";
 const API_URL = process.env.REACT_APP_API_URL;
+
 const Table = () => {
   const [allItems, setAllItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ const Table = () => {
     { id: "S002", name: "Catering ", price: 1000, image: "https://via.placeholder.com/60x60.png?text=Install" },
   ];
 
-  // Fetch data
+  // ✅ Fetch data (fixed)
   const fetchData = async () => {
     if (useDemo) {
       setAllItems(viewType === "products" ? demoProducts : demoServices);
@@ -43,10 +44,20 @@ const Table = () => {
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
       const data = await res.json();
-      setAllItems(data.length > 0 ? data : viewType === "products" ? demoProducts : demoServices);
+
+      // ✅ FIX: Map correctly depending on backend response shape
+      if (viewType === "services" && Array.isArray(data.services)) {
+        setAllItems(data.services);
+      } else if (viewType === "products" && Array.isArray(data.products)) {
+        setAllItems(data.products);
+      } else if (Array.isArray(data)) {
+        setAllItems(data);
+      } else {
+        setAllItems(viewType === "products" ? demoProducts : demoServices);
+      }
     } catch (err) {
       console.error(err);
-      toast.error(" Failed to fetch data. Showing demo data.");
+      toast.error("Failed to fetch data. Showing demo data.");
       setAllItems(viewType === "products" ? demoProducts : demoServices);
     } finally {
       setLoading(false);
@@ -82,7 +93,7 @@ const Table = () => {
             body: JSON.stringify({ id }),
           });
           if (!res.ok) throw new Error("Failed to remove item");
-          toast.success(" Deleted successfully!");
+          toast.success("Deleted successfully!");
           fetchData();
         } catch (err) {
           console.error(err);
@@ -93,7 +104,6 @@ const Table = () => {
       },
     });
   };
-
 
   const toggleStock = async (id) => {
     if (viewType !== "products") return;
@@ -128,7 +138,7 @@ const Table = () => {
 
   const savePriceEdit = async (id) => {
     if (!newPrice || isNaN(newPrice)) {
-      toast.error(" Enter a valid price");
+      toast.error("Enter a valid price");
       return;
     }
 
@@ -153,73 +163,71 @@ const Table = () => {
         body: JSON.stringify({ id, price: Number(newPrice) }),
       });
 
-      toast.success(" Price updated successfully!");
+      toast.success("Price updated successfully!");
       fetchData();
       setEditingId(null);
     } catch (err) {
       console.error(err);
-      toast.error(" Failed to update price");
+      toast.error("Failed to update price");
     }
   };
 
-  // PDF download
-const downloadPDF = async () => {
-  if (!allItems.length) return toast.info("No data to download");
+  // PDF download (unchanged)
+  const downloadPDF = async () => {
+    if (!allItems.length) return toast.info("No data to download");
 
-  const doc = new jsPDF();
-  doc.text(viewType === "products" ? "Product List" : "Service List", 14, 15);
+    const doc = new jsPDF();
+    doc.text(viewType === "products" ? "Product List" : "Service List", 14, 15);
 
-  const columns = viewType === "products"
-    ? ["Image", "ID", "Name", "Price (Ksh)", "Stock Status"]
-    : ["Image", "ID", "Name", "Price (Ksh)"];
+    const columns =
+      viewType === "products"
+        ? ["Image", "ID", "Name", "Price (Ksh)", "Stock Status"]
+        : ["Image", "ID", "Name", "Price (Ksh)"];
 
-  const loadImageAsBase64 = (url) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.setAttribute("crossOrigin", "anonymous");
-      img.src = url;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = 60;
-        canvas.height = 60;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const dataURL = canvas.toDataURL("image/jpeg");
-        resolve(dataURL);
-      };
-      img.onerror = () => resolve(""); 
+    const loadImageAsBase64 = (url) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.setAttribute("crossOrigin", "anonymous");
+        img.src = url;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = 60;
+          canvas.height = 60;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const dataURL = canvas.toDataURL("image/jpeg");
+          resolve(dataURL);
+        };
+        img.onerror = () => resolve("");
+      });
+    };
+
+    const rows = await Promise.all(
+      allItems.map(async (item) => {
+        const imgData = await loadImageAsBase64(item.image);
+        return viewType === "products"
+          ? [imgData, item.id, item.name, item.price, item.inStock ? "In Stock" : "Out of Stock"]
+          : [imgData, item.id, item.name, item.price];
+      })
+    );
+
+    doc.autoTable({
+      head: [columns],
+      body: rows.map((row) => row.map((cell, idx) => (idx === 0 ? "" : cell))),
+      startY: 20,
+      didDrawCell: (data) => {
+        if (data.column.index === 0 && rows[data.row.index][0]) {
+          const imgData = rows[data.row.index][0];
+          const dim = 15;
+          doc.addImage(imgData, "JPEG", data.cell.x + 1, data.cell.y + 1, dim, dim);
+        }
+      },
+      columnStyles: { 0: { cellWidth: 18 } },
     });
+
+    doc.save(`${viewType}-list.pdf`);
+    toast.success("PDF downloaded successfully");
   };
-
-  const rows = await Promise.all(
-    allItems.map(async (item) => {
-      const imgData = await loadImageAsBase64(item.image);
-      return viewType === "products"
-        ? [imgData, item.id, item.name, item.price, item.inStock ? "In Stock" : "Out of Stock"]
-        : [imgData, item.id, item.name, item.price];
-    })
-  );
-
-  doc.autoTable({
-    head: [columns],
-    body: rows.map(row => row.map((cell, idx) => idx === 0 ? "" : cell)), // hide base64 string
-    startY: 20,
-    didDrawCell: (data) => {
-      if (data.column.index === 0 && rows[data.row.index][0]) {
-        const imgData = rows[data.row.index][0];
-        const dim = 15;
-        doc.addImage(imgData, "JPEG", data.cell.x + 1, data.cell.y + 1, dim, dim);
-      }
-    },
-    columnStyles: { 0: { cellWidth: 18 } },
-  });
-
-  doc.save(`${viewType}-list.pdf`);
-  toast.success(" PDF downloaded successfully");
-};
-
-
-
 
   return (
     <div className="table-wrapper">
@@ -286,7 +294,9 @@ const downloadPDF = async () => {
                             onChange={(e) => setNewPrice(e.target.value)}
                             className="price-input"
                           />
-                          <button className="save-btn" onClick={() => savePriceEdit(item.id)}>💾</button>
+                          <button className="save-btn" onClick={() => savePriceEdit(item.id)}>
+                            💾
+                          </button>
                         </div>
                       ) : (
                         <span
