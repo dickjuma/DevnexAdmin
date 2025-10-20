@@ -1,36 +1,50 @@
-/* Container */
+/* === Container === */
 .auto-invoice-container {
   padding: 30px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #f7f8fa;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Header */
+/* === Header === */
 .auto-invoice-container h1 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #333;
+  color: #222;
   text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-/* Refresh button */
+/* === Refresh Button === */
 .btn-refresh {
   background-color: #ffc107;
   color: #000;
   border: none;
-  padding: 8px 16px;
-  margin-bottom: 20px;
-  border-radius: 6px;
+  padding: 10px 18px;
+  margin-bottom: 25px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 .btn-refresh:hover {
   background-color: #e0a800;
+  transform: translateY(-2px);
 }
 
-/* Table styles */
+/* === Table Container (for scroll) === */
+.table-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  overflow-x: auto;
+}
+
+/* === Table Styles === */
 .invoice-table {
   width: 100%;
   border-collapse: separate;
@@ -38,88 +52,151 @@
   background-color: #fff;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  min-width: 700px;
 }
 
 .invoice-table th {
   background-color: #007bff;
   color: #fff;
-  padding: 12px;
+  padding: 14px;
   text-align: left;
   font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
 .invoice-table td {
   padding: 12px;
   background-color: #fdfdfd;
-  color: #555;
+  color: #444;
+  font-size: 0.9rem;
+  vertical-align: middle;
 }
 
+.invoice-table tbody tr {
+  transition: background 0.25s ease;
+}
 .invoice-table tbody tr:hover td {
   background-color: #e9f5ff;
 }
 
-/* Payment status button */
+/* === Payment Status Button === */
 .status-btn {
-  padding: 6px 12px;
+  padding: 6px 14px;
   cursor: pointer;
   border: none;
   color: #fff;
   border-radius: 6px;
   font-weight: 600;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+  font-size: 0.9rem;
 }
 
 .status-btn.paid { background-color: #28a745; }
-.status-btn.pending { background-color: #dc3545; }
+.status-btn.unpaid { background-color: #dc3545; }
 
 .status-btn:hover {
-  opacity: 0.85;
+  opacity: 0.9;
+  transform: scale(1.03);
 }
 
-/* Generate button */
+/* === Generate Invoice Button === */
 .btn-generate {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 6px 12px;
+  padding: 6px 14px;
   cursor: pointer;
   border-radius: 6px;
   font-weight: 600;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 .btn-generate:hover {
   background-color: #0056b3;
+  transform: scale(1.03);
 }
 
-/* No orders row */
+/* === Empty State === */
 .invoice-table td[colspan] {
   text-align: center;
   font-style: italic;
   color: #777;
+  padding: 20px;
 }
 
-/* Toastify tweaks */
+/* === Toastify Custom Colors === */
 .Toastify__toast--success {
-  background: #28a745;
+  background: #28a745 !important;
 }
 .Toastify__toast--error {
-  background: #dc3545;
+  background: #dc3545 !important;
 }
 .Toastify__toast--warning {
-  background: #ffc107;
-  color: #000;
+  background: #ffc107 !important;
+  color: #000 !important;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .invoice-table th, .invoice-table td {
-    padding: 8px;
+/* === Responsive Design === */
+@media (max-width: 992px) {
+  .auto-invoice-container h1 {
+    font-size: 1.75rem;
+  }
+
+  .btn-refresh {
+    padding: 8px 14px;
     font-size: 0.9rem;
   }
 
+  .invoice-table th,
+  .invoice-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .auto-invoice-container {
+    padding: 20px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .invoice-table {
+    min-width: 600px;
+  }
+
   .btn-refresh, .btn-generate, .status-btn {
-    padding: 4px 8px;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+
+  .invoice-table th {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auto-invoice-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn-refresh {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .invoice-table {
+    min-width: 500px;
+  }
+
+  .status-btn, .btn-generate {
+    width: 100%;
+    padding: 8px;
     font-size: 0.85rem;
   }
 }

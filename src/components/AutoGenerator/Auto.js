@@ -4,6 +4,7 @@ import "jspdf-autotable";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Auto.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Auto = () => {
   const [orders, setOrders] = useState([]);
@@ -12,13 +13,13 @@ const Auto = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/allorders");
+      const res = await fetch(`${API_URL}/allorders`);
       if (!res.ok) throw new Error("Failed to fetch orders");
       const data = await res.json();
       setOrders(data || []);
     } catch (err) {
       console.error(err);
-      toast.error("⚠️ Cannot fetch orders. Make sure backend is running.");
+      toast.error("⚠️ Cannot fetch orders. Ensure backend is running.");
     } finally {
       setLoading(false);
     }
@@ -28,16 +29,17 @@ const Auto = () => {
     fetchOrders();
   }, []);
 
+  // ✅ Toggle Payment (Paid/Unpaid)
   const togglePaymentStatus = async (orderId, currentStatus) => {
-    const newStatus = currentStatus === "Paid" ? "Pending" : "Paid";
+    const newStatus = currentStatus === "Paid" ? "Unpaid" : "Paid";
     try {
-      const res = await fetch("http://localhost:4000/update-order-payment", {
+      const res = await fetch(`${API_URL}/update-payment-status`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orderId, newStatus }),
       });
       if (!res.ok) throw new Error("Failed to update payment status");
-      toast.success(`Payment status updated to ${newStatus}`);
+      toast.success(`✅ Payment status changed to ${newStatus}`);
       fetchOrders();
     } catch (err) {
       console.error(err);
@@ -45,9 +47,10 @@ const Auto = () => {
     }
   };
 
+  // ✅ Generate Invoice PDF
   const generateInvoice = (order) => {
     if (!order.cart || !order.cart.length) {
-      toast.warn("No products found for this order.");
+      toast.warn("⚠️ No products found in this order.");
       return;
     }
 
@@ -55,7 +58,7 @@ const Auto = () => {
     doc.setFontSize(16);
     doc.text("Devnex Groceries", 14, 20);
     doc.setFontSize(10);
-    doc.text("Email: info@devnex.com | Phone: 0719832719 | Location: Nairobi, Kenya", 14, 26);
+    doc.text("Email: info@devnex.com | Phone: 0719832719 | Nairobi, Kenya", 14, 26);
 
     doc.setFontSize(12);
     doc.text(`Invoice for Order: ${order.orderNumber}`, 14, 36);
@@ -85,15 +88,17 @@ const Auto = () => {
     const finalY = doc.lastAutoTable.finalY || 90;
     doc.setFontSize(12);
     doc.text(`Grand Total: Ksh ${order.totalPrice.toFixed(2)}`, 14, finalY + 10);
-    doc.text(`Payment Status: ${order.paymentStatus || "Pending"}`, 14, finalY + 16);
+    doc.text(`Payment Status: ${order.paymentStatus}`, 14, finalY + 16);
 
     doc.save(`Invoice_${order.orderNumber}.pdf`);
   };
 
   return (
     <div className="auto-invoice-container">
-      <h1>Auto Invoice</h1>
-      <button onClick={fetchOrders} className="btn-refresh">🔄 Refresh Orders</button>
+      <h1>Auto Invoice System</h1>
+      <button onClick={fetchOrders} className="btn-refresh">
+        🔄 Refresh Orders
+      </button>
 
       {loading && <p>Loading orders...</p>}
 
@@ -103,8 +108,8 @@ const Auto = () => {
             <th>Order Number</th>
             <th>Customer</th>
             <th>Total (Ksh)</th>
-            <th>Payment Status</th>
-            <th>Actions</th>
+            <th>Payment</th>
+            <th>Invoice</th>
           </tr>
         </thead>
         <tbody>
@@ -116,28 +121,32 @@ const Auto = () => {
                 <td>{order.totalPrice.toFixed(2)}</td>
                 <td>
                   <button
-                    className={`status-btn ${order.paymentStatus?.toLowerCase() || "pending"}`}
+                    className={`status-btn ${
+                      order.paymentStatus === "Paid" ? "paid" : "unpaid"
+                    }`}
                     onClick={() => togglePaymentStatus(order._id, order.paymentStatus)}
                   >
-                    {order.paymentStatus || "Pending"}
+                    {order.paymentStatus}
                   </button>
                 </td>
                 <td>
                   <button className="btn-generate" onClick={() => generateInvoice(order)}>
-                    Generate PDF
+                    📄 Generate PDF
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5" style={{ textAlign: "center" }}>No orders available</td>
+              <td colSpan="5" style={{ textAlign: "center" }}>
+                No orders available
+              </td>
             </tr>
           )}
         </tbody>
       </table>
 
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover draggable />
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
