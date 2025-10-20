@@ -73,7 +73,7 @@ const Admin = () => {
     { name: "Payments", icon: <CreditCard size={20} />, path: "/payment" },
     { name: "Invoices", icon: <CreditCard size={20} />, path: "/invoice" },
     { name: "Receipts", icon: <CreditCard size={20} />, path: "/receipt" },
-    { name: "Auto Invoice", icon: <CreditCard size={20} />, path: "/admin/autoinvoice" },
+    { name: "Auto Invoice", icon: <CreditCard size={20} />, path: "/autoinvoice" },
     { name: "Settings", icon: <Settings size={20} />, path: "/admin/login" },
   ];
 
